@@ -1,12 +1,19 @@
 % !TEX encoding = UTF-8 Unicode
 
 \documentclass[12pt,a4paper]{article}
-\usepackage[utf8]{inputenc}
+
+\usepackage[pdftex]{graphicx}
 \usepackage[russian]{babel}
+\usepackage[utf8]{inputenc}
+
+\DeclareGraphicsRule{*}{mps}{*}{}
 
 \begin{document}
     \include{title}
     \pagebreak
     \tableofcontents
     \thispagestyle{empty}
+
+    \include{classes}
+
 \end{document}
