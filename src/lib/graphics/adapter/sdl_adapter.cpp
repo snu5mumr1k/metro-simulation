@@ -3,7 +3,7 @@
 #include <stdexcept>
 #include <string>
 
-namespace NGraphics {
+namespace graphics {
     SDL::SDL() :
         width_(0),
         height_(0),

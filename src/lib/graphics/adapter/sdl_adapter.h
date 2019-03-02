@@ -4,7 +4,7 @@
 #include <SDL.h>
 #include <SDL_opengl.h>
 
-namespace NGraphics {
+namespace graphics {
     class SDL {
     public:
         SDL();

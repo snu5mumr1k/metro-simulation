@@ -7,7 +7,7 @@
 int main() {
     using namespace std::chrono_literals;
 
-    NGraphics::SDL *sdl = Singleton<NGraphics::SDL>();
+    graphics::SDL *sdl = Singleton<graphics::SDL>();
 
     bool quit = false;
     const auto sleep_time = 30ms;
