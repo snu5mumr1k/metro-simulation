@@ -8,6 +8,8 @@ include_directories(${OPENGL_INCLUDE_DIR})
 find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIR})
 
+message(${SDL2_LIBRARY})
+
 target_link_libraries(lib-graphics-adapter
     external-gl
     ${SDL2_LIBRARY}
