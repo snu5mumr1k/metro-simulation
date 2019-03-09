@@ -13,7 +13,11 @@ namespace graphics {
         window_(nullptr),
         gl_context_(nullptr),
         context_major_version_(3),
-        context_minor_version_(3)
+        context_minor_version_(3),
+        show_demo_window_(true),
+        show_another_window_(false),
+        clear_color_(0.45f, 0.55f, 0.60f, 1.00f),
+        glsl_version_("#version 150")
     {
         if (SDL_Init(SDL_INIT_VIDEO) < 0) {
             throw std::runtime_error("SDL couldn't be initialized! SDL_Error: " + std::string(SDL_GetError()));
@@ -58,6 +62,9 @@ namespace graphics {
         ImGuiIO& io = ImGui::GetIO(); (void)io;
 
         ImGui::StyleColorsDark();
+
+        ImGui_ImplSDL2_InitForOpenGL(window_, gl_context_);
+        ImGui_ImplOpenGL3_Init(glsl_version_.c_str());
     };
 
     SDL::~SDL() {
