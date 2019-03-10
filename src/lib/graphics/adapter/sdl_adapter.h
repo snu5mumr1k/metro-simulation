@@ -28,8 +28,6 @@ namespace graphics {
         int context_major_version_;
         int context_minor_version_;
 
-        bool show_demo_window_;
-        bool show_another_window_;
         ImVec4 clear_color_;
 
         std::string glsl_version_;
