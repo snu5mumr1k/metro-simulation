@@ -14,7 +14,6 @@ namespace graphics {
         gl_context_(nullptr),
         context_major_version_(3),
         context_minor_version_(3),
-        clear_color_(0.45f, 0.55f, 0.60f, 1.00f),
         glsl_version_("#version 150")
     {
         if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -82,23 +81,28 @@ namespace graphics {
         SDL_GL_SwapWindow(window_);
     }
 
+    void SDL::DrawInterface() {
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplSDL2_NewFrame(window_);
+        ImGui::NewFrame();
+
+        ImGuiIO& io = ImGui::GetIO();
+
+
+        if (ImGui::BeginMainMenuBar()) {
+            ImGui::EndMainMenuBar();
+        }
+
+        ImGui::Render();
+        SDL_GL_MakeCurrent(window_, gl_context_);
+        glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
+        glClear(GL_COLOR_BUFFER_BIT);
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+    }
+
     bool SDL::HandleEvents() {
         SDL_Event sdl_event;
         while (SDL_PollEvent(&sdl_event) != 0) {
-            ImGui_ImplOpenGL3_NewFrame();
-            ImGui_ImplSDL2_NewFrame(window_);
-            ImGui::NewFrame();
-
-            ImGuiIO& io = ImGui::GetIO();
-
-            ImGui::Render();
-            SDL_GL_MakeCurrent(window_, gl_context_);
-            glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
-            glClearColor(clear_color_.x, clear_color_.y, clear_color_.z, clear_color_.w);
-            glClear(GL_COLOR_BUFFER_BIT);
-            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-            SDL_GL_SwapWindow(window_);
-
             switch (sdl_event.type) {
                 case SDL_QUIT:
                     return true;

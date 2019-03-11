@@ -14,6 +14,9 @@ int main() {
     while (!quit) {
         quit = sdl->HandleEvents();
 
+        sdl->DrawInterface();
+
+        sdl->SwapBuffers();
         std::this_thread::sleep_for(sleep_time);
     }
 }

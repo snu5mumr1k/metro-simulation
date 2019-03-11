@@ -14,9 +14,10 @@ namespace graphics {
         SDL();
         ~SDL();
 
-        void ClearBuffer();
-        void SwapBuffers();
         bool HandleEvents();
+        void ClearBuffer();
+        void DrawInterface();
+        void SwapBuffers();
 
     private:
         int width_;
@@ -27,8 +28,6 @@ namespace graphics {
 
         int context_major_version_;
         int context_minor_version_;
-
-        ImVec4 clear_color_;
 
         std::string glsl_version_;
     };
