@@ -1,5 +1,6 @@
 #include "sdl_adapter.h"
 
+#include <optional>
 #include <stdexcept>
 #include <string>
 
@@ -81,35 +82,34 @@ namespace graphics {
         SDL_GL_SwapWindow(window_);
     }
 
-    void SDL::DrawInterface() {
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplSDL2_NewFrame(window_);
-        ImGui::NewFrame();
-
-        ImGuiIO& io = ImGui::GetIO();
-
-
-        if (ImGui::BeginMainMenuBar()) {
-            ImGui::EndMainMenuBar();
-        }
-
-        ImGui::Render();
-        SDL_GL_MakeCurrent(window_, gl_context_);
-        glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
-        glClear(GL_COLOR_BUFFER_BIT);
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-    }
-
-    bool SDL::HandleEvents() {
+    std::optional<metro::Config> SDL::DrawInterface(const metro::Config& config) {
         SDL_Event sdl_event;
+        std::optional<metro::Config> result = config;
         while (SDL_PollEvent(&sdl_event) != 0) {
-            switch (sdl_event.type) {
-                case SDL_QUIT:
-                    return true;
-                default:
-                    break;
+            ImGui_ImplOpenGL3_NewFrame();
+            ImGui_ImplSDL2_NewFrame(window_);
+            ImGui::NewFrame();
+
+            ImGuiIO& io = ImGui::GetIO();
+
+            if (ImGui::BeginMainMenuBar()) {
+                if (!ImGui::MenuItem("Quit", "Alt+F4")) {
+                    result->set_ticks_per_second(12.0f);
+                } else {
+                    ImGui::EndMainMenuBar();
+                    return {};
+                }
+                ImGui::EndMainMenuBar();
             }
+
+
+            ImGui::Render();
+            SDL_GL_MakeCurrent(window_, gl_context_);
+            glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
+            glClear(GL_COLOR_BUFFER_BIT);
+            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+            SDL_GL_SwapWindow(window_);
         }
-        return false;
+        return config;
     }
 }

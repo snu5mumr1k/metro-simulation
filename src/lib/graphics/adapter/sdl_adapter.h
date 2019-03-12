@@ -5,7 +5,9 @@
 #include <SDL.h>
 #include <SDL_opengl.h>
 #include <external/imgui/imgui.h>
+#include <proto/config.pb.h>
 
+#include <optional>
 #include <string>
 
 namespace graphics {
@@ -14,9 +16,8 @@ namespace graphics {
         SDL();
         ~SDL();
 
-        bool HandleEvents();
         void ClearBuffer();
-        void DrawInterface();
+        std::optional<metro::Config> DrawInterface(const metro::Config& config);
         void SwapBuffers();
 
     private:

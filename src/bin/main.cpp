@@ -11,12 +11,14 @@ int main() {
 
     bool quit = false;
     const auto sleep_time = 30ms;
+    std::optional<metro::Config> config = metro::Config();
+    config->set_ticks_per_second(1.0f);
     while (!quit) {
-        quit = sdl->HandleEvents();
+        config = sdl->DrawInterface(*config);
 
-        sdl->DrawInterface();
-
-        sdl->SwapBuffers();
+        if (!config) {
+            quit = true;
+        }
         std::this_thread::sleep_for(sleep_time);
     }
 }
