@@ -5,6 +5,7 @@ protobuf_generate_cpp(
     PROTO_HDRS
 
     config.proto
+    metro.proto
 )
 
 add_library(proto

@@ -1,11 +1,14 @@
 #include "sdl_adapter.h"
 
-#include <optional>
-#include <stdexcept>
-#include <string>
+#include <proto/config.pb.h>
+#include <proto/metro.pb.h>
 
 #include <external/imgui/examples/imgui_impl_opengl3.h>
 #include <external/imgui/examples/imgui_impl_sdl.h>
+
+#include <optional>
+#include <stdexcept>
+#include <string>
 
 namespace graphics {
     SDL::SDL() :
@@ -79,37 +82,44 @@ namespace graphics {
     }
 
     void SDL::SwapBuffers() {
+        ImGuiIO& io = ImGui::GetIO();
+        ImGui::Render();
+        SDL_GL_MakeCurrent(window_, gl_context_);
+        glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
+        glClear(GL_COLOR_BUFFER_BIT);
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         SDL_GL_SwapWindow(window_);
     }
 
-    std::optional<metro::Config> SDL::DrawInterface(const metro::Config& config) {
-        SDL_Event sdl_event;
-        std::optional<metro::Config> result = config;
-        while (SDL_PollEvent(&sdl_event) != 0) {
-            ImGui_ImplOpenGL3_NewFrame();
-            ImGui_ImplSDL2_NewFrame(window_);
-            ImGui::NewFrame();
+    std::optional<metro_simulation::Config> SDL::DrawInterface(const metro_simulation::Config& config) {
+        std::optional<metro_simulation::Config> result = config;
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplSDL2_NewFrame(window_);
+        ImGui::NewFrame();
 
-            ImGuiIO& io = ImGui::GetIO();
 
-            if (ImGui::BeginMainMenuBar()) {
-                if (!ImGui::MenuItem("Quit", "Alt+F4")) {
-                    result->set_ticks_per_second(12.0f);
-                } else {
-                    ImGui::EndMainMenuBar();
-                    return {};
-                }
-                ImGui::EndMainMenuBar();
+        if (ImGui::BeginMainMenuBar()) {
+            if (ImGui::MenuItem("Quit", "Alt+F4")) {
+                result = {};
             }
-
-
-            ImGui::Render();
-            SDL_GL_MakeCurrent(window_, gl_context_);
-            glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
-            glClear(GL_COLOR_BUFFER_BIT);
-            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-            SDL_GL_SwapWindow(window_);
+            ImGui::EndMainMenuBar();
         }
-        return config;
+
+        SDL_Event sdl_event;
+        while (SDL_PollEvent(&sdl_event) != 0) {
+            switch (sdl_event.type) {
+                case SDL_QUIT: {
+                    result = {};
+                    break;
+                }
+            }
+        }
+        return result;
+    }
+
+    void SDL::Draw(const metro_simulation::Config& config, const metro_simulation::Metro& metro) {
+        ImGui::Begin("Train positions");
+        ImGui::Text("Here will be train positions");
+        ImGui::End();
     }
 }

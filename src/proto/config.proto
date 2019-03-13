@@ -1,7 +1,6 @@
 syntax = "proto3";
 
-package metro;
+package metro_simulation;
 
 message Config {
-    float ticks_per_second = 1;
 }

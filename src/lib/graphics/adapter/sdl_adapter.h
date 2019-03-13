@@ -5,10 +5,14 @@
 #include <SDL.h>
 #include <SDL_opengl.h>
 #include <external/imgui/imgui.h>
-#include <proto/config.pb.h>
 
 #include <optional>
 #include <string>
+
+namespace metro_simulation {
+    class Metro;
+    class Config;
+}
 
 namespace graphics {
     class SDL {
@@ -16,8 +20,10 @@ namespace graphics {
         SDL();
         ~SDL();
 
+        std::optional<metro_simulation::Config> DrawInterface(const metro_simulation::Config& config);
+        void Draw(const metro_simulation::Config& config, const metro_simulation::Metro& metro);
+
         void ClearBuffer();
-        std::optional<metro::Config> DrawInterface(const metro::Config& config);
         void SwapBuffers();
 
     private:

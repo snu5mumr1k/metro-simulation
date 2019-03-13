@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package metro_simulation;
+
+message Metro {
+    repeated Line lines = 1;
+}
+
+message Line {
+    int64 id = 1;
+
+    repeated Station stations = 2;
+    repeated Section sections = 3;
+}
+
+message Station {
+    int64 id = 1;
+
+    repeated Platform platforms = 2;
+}
+
+message Section {
+    int64 id = 1;
+
+    int64 start_platform_id = 2;
+    int64 finish_platform_id = 3;
+
+    int64 length = 4;
+
+    repeated Train trains = 5;
+}
+
+message Platform {
+    int64 id = 1;
+
+    enum Type {
+        PASSENGER = 0;
+        DEPOT = 1;
+    }
+
+    repeated Train trains = 2;
+}
+
+message Train {
+    int64 id = 1;
+
+    double path_completed = 2;
+}
