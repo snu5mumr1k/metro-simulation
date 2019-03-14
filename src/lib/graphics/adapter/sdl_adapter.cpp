@@ -119,7 +119,15 @@ namespace graphics {
 
     void SDL::Draw(const metro_simulation::Config& config, const metro_simulation::Metro& metro) {
         ImGui::Begin("Train positions");
-        ImGui::Text("Here will be train positions");
+        for (const auto& line : metro.lines()) {
+            ImGui::Text("Line %lld", line.id());
+            for (const auto& section : line.sections()) {
+                ImGui::Text("Section %lld", section.id());
+                for (const auto& train : section.trains()) {
+                    ImGui::Text("Train %lld at %.2lf part of section", train.id(), train.path_completed_part());
+                }
+            }
+        }
         ImGui::End();
     }
 }

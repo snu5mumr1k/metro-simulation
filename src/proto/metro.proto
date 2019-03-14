@@ -44,5 +44,5 @@ message Platform {
 message Train {
     int64 id = 1;
 
-    double path_completed = 2;
+    double path_completed_part = 2;
 }
