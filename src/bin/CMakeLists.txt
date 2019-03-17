@@ -16,5 +16,6 @@ target_link_libraries(metro-simulator
     external-gl
     external-imgui
     lib-graphics-adapter
+    lib-simulator
     lib-util-singleton
 )

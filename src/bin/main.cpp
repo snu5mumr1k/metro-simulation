@@ -1,13 +1,15 @@
-#include <lib/graphics/adapter/sdl_adapter.h>
-#include <lib/util/singleton/singleton.h>
-#include <proto/config.pb.h>
-#include <proto/metro.pb.h>
-
-#include <google/protobuf/text_format.h>
-
 #include <chrono>
 #include <fstream>
 #include <thread>
+
+#include <google/protobuf/text_format.h>
+
+#include <proto/config.pb.h>
+#include <proto/metro.pb.h>
+
+#include <lib/graphics/adapter/sdl_adapter.h>
+#include <lib/simulator/simulator.h>
+#include <lib/util/singleton/singleton.h>
 
 void DumpMetro(const metro_simulation::Metro& metro, const std::string& filename) {
     std::ofstream out(filename);
@@ -64,7 +66,7 @@ int main() {
         if (!config) {
             quit = true;
         } else {
-            Simulator->Tick(metro, config);
+            metro_simulation::SimulatorTick(&metro, *config);
         }
 
         sdl->Draw(*config, metro);
