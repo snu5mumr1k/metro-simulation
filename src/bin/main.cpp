@@ -63,6 +63,8 @@ int main() {
         config = sdl->DrawInterface(*config);
         if (!config) {
             quit = true;
+        } else {
+            Simulator->Tick(metro, config);
         }
 
         sdl->Draw(*config, metro);
