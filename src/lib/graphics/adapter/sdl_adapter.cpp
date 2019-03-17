@@ -11,15 +11,14 @@
 #include <string>
 
 namespace graphics {
-    SDL::SDL() :
-        width_(0),
-        height_(0),
-        window_(nullptr),
-        gl_context_(nullptr),
-        context_major_version_(3),
-        context_minor_version_(3),
-        glsl_version_("#version 150")
-    {
+    SDL::SDL()
+        : width_(0),
+          height_(0),
+          window_(nullptr),
+          gl_context_(nullptr),
+          context_major_version_(3),
+          context_minor_version_(3),
+          glsl_version_("#version 150") {
         if (SDL_Init(SDL_INIT_VIDEO) < 0) {
             throw std::runtime_error("SDL couldn't be initialized! SDL_Error: " + std::string(SDL_GetError()));
         }
@@ -65,7 +64,7 @@ namespace graphics {
 
         ImGui_ImplSDL2_InitForOpenGL(window_, gl_context_);
         ImGui_ImplOpenGL3_Init(glsl_version_.c_str());
-    };
+    }
 
     SDL::~SDL() {
         ImGui_ImplOpenGL3_Shutdown();
@@ -85,7 +84,7 @@ namespace graphics {
         ImGuiIO& io = ImGui::GetIO();
         ImGui::Render();
         SDL_GL_MakeCurrent(window_, gl_context_);
-        glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
+        glViewport(0, 0, static_cast<int>(io.DisplaySize.x), static_cast<int>(io.DisplaySize.y));
         glClear(GL_COLOR_BUFFER_BIT);
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         SDL_GL_SwapWindow(window_);
@@ -130,4 +129,4 @@ namespace graphics {
         }
         ImGui::End();
     }
-}
+}  // namespace graphics

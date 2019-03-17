@@ -10,32 +10,32 @@
 #include <string>
 
 namespace metro_simulation {
-    class Metro;
-    class Config;
-}
+class Metro;
+class Config;
+}  // namespace metro_simulation
 
 namespace graphics {
-    class SDL {
-    public:
-        SDL();
-        ~SDL();
+class SDL {
+public:
+    SDL();
+    ~SDL();
 
-        std::optional<metro_simulation::Config> DrawInterface(const metro_simulation::Config& config);
-        void Draw(const metro_simulation::Config& config, const metro_simulation::Metro& metro);
+    std::optional<metro_simulation::Config> DrawInterface(const metro_simulation::Config& config);
+    void Draw(const metro_simulation::Config& config, const metro_simulation::Metro& metro);
 
-        void ClearBuffer();
-        void SwapBuffers();
+    void ClearBuffer();
+    void SwapBuffers();
 
-    private:
-        int width_;
-        int height_;
+private:
+    int width_;
+    int height_;
 
-        SDL_Window *window_;
-        SDL_GLContext gl_context_;
+    SDL_Window *window_;
+    SDL_GLContext gl_context_;
 
-        int context_major_version_;
-        int context_minor_version_;
+    int context_major_version_;
+    int context_minor_version_;
 
-        std::string glsl_version_;
-    };
-}
+    std::string glsl_version_;
+};
+}  // namespace graphics
