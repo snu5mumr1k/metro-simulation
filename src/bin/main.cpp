@@ -3,10 +3,18 @@
 #include <proto/config.pb.h>
 #include <proto/metro.pb.h>
 
+#include <google/protobuf/text_format.h>
+
 #include <chrono>
+#include <fstream>
 #include <thread>
 
-metro_simulation::Metro generate_metro() {
+void DumpMetro(const metro_simulation::Metro& metro, const std::string& filename) {
+    std::ofstream out(filename);
+    metro.SerializeToOstream(&out);
+}
+
+metro_simulation::Metro GenerateMetro() {
     metro_simulation::Metro result;
 
     result.add_lines();
@@ -50,7 +58,7 @@ int main() {
     bool quit = false;
     const auto sleep_time = 30ms;
     std::optional<metro_simulation::Config> config = metro_simulation::Config();
-    metro_simulation::Metro metro = generate_metro();
+    metro_simulation::Metro metro = GenerateMetro();
     while (!quit) {
         config = sdl->DrawInterface(*config);
         if (!config) {
@@ -63,4 +71,5 @@ int main() {
 
         std::this_thread::sleep_for(sleep_time);
     }
+    DumpMetro(metro, "./metro.json");
 }
