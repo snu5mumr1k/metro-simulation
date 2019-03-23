@@ -16,64 +16,28 @@ void DumpMetro(const metro_simulation::Metro& metro, const std::string& filename
     metro.SerializeToOstream(&out);
 }
 
-metro_simulation::Metro GenerateMetro() {
-    metro_simulation::Metro result;
-
-    result.add_lines();
-    auto line = result.mutable_lines(0);
-    line->set_id(0);
-
-    line->add_stations();
-    line->add_stations();
-    auto station1 = line->mutable_stations(0);
-    auto station2 = line->mutable_stations(1);
-    station1->set_id(0);
-    station2->set_id(1);
-
-    station1->add_platforms();
-    auto platform1 = station1->mutable_platforms(0);
-    platform1->set_id(0);
-
-    station2->add_platforms();
-    auto platform2 = station2->mutable_platforms(0);
-    platform2->set_id(0);
-
-    line->add_sections();
-    auto section = line->mutable_sections(0);
-    section->set_id(0);
-    section->set_start_platform_id(platform1->id());
-    section->set_finish_platform_id(platform2->id());
-
-    section->add_trains();
-    auto train = section->mutable_trains(0);
-    train->set_id(0);
-    train->set_path_completed_part(0.5);
-
-    return result;
-}
-
 int main() {
     using namespace std::chrono_literals;
 
     graphics::SDL *sdl = Singleton<graphics::SDL>();
 
     bool quit = false;
-    const auto sleep_time = 30ms;
+    const auto sleep_time = 1s;
     std::optional<metro_simulation::Config> config = metro_simulation::Config();
-    metro_simulation::Metro metro = GenerateMetro();
+    core::Simulator simulator(*config);
     while (!quit) {
         config = sdl->DrawInterface(*config);
         if (!config) {
             quit = true;
         } else {
-            metro_simulation::SimulatorTick(&metro, *config);
+            simulator.Tick();
         }
 
-        sdl->Draw(*config, metro);
+        sdl->Draw(*config, simulator.metro());
 
         sdl->SwapBuffers();
 
         std::this_thread::sleep_for(sleep_time);
     }
-    DumpMetro(metro, "./metro.json");
+    DumpMetro(simulator.metro(), "./metro.json");
 }

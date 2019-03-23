@@ -11,6 +11,8 @@ message Line {
 
     repeated Station stations = 2;
     repeated Section sections = 3;
+
+    repeated Train trains = 4;
 }
 
 message Station {
@@ -26,8 +28,6 @@ message Section {
     int64 finish_platform_id = 3;
 
     int64 length = 4;
-
-    repeated Train trains = 5;
 }
 
 message Platform {
@@ -37,12 +37,26 @@ message Platform {
         PASSENGER = 0;
         DEPOT = 1;
     }
-
-    repeated Train trains = 2;
 }
 
 message Train {
     int64 id = 1;
 
-    double path_completed_part = 2;
+    enum State {
+        PLATFORM = 0;
+        SECTION = 1;
+        IDLE = 2;
+    }
+
+    double section_completed_part = 2;
+
+    int64 platform_id = 3;
+    int64 section_id = 4;
+
+    Path path = 5;
+    State state = 6;
+}
+
+message Path {
+    repeated int64 section_ids = 1;
 }

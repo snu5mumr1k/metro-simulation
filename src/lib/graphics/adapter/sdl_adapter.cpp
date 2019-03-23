@@ -122,8 +122,24 @@ namespace graphics {
             ImGui::Text("Line %lld", line.id());
             for (const auto& section : line.sections()) {
                 ImGui::Text("Section %lld", section.id());
-                for (const auto& train : section.trains()) {
-                    ImGui::Text("Train %lld at %.2lf part of section", train.id(), train.path_completed_part());
+            }
+            for (const auto& station : line.stations()) {
+                ImGui::Text("Section %lld", station.id());
+            }
+            for (const auto& train : line.trains()) {
+                switch (train.state()) {
+                    case metro_simulation::Train::IDLE: {
+                        ImGui::Text("Train %lld is idle", train.id());
+                        break;
+                    }
+                    case metro_simulation::Train::SECTION: {
+                        ImGui::Text("Train %lld at %.2lf part of section", train.id(), train.section_completed_part());
+                        break;
+                    }
+                    case metro_simulation::Train::PLATFORM: {
+                        ImGui::Text("Train %lld is at the platform", train.id());
+                        break;
+                    }
                 }
             }
         }
