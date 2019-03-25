@@ -1,30 +1,41 @@
 #include "train.h"
 
-namespace {
-    const double rate = 0.33;
-}
-
 namespace core {
-Train::Train(metro_simulation::Train *train) : train_(train), path_(train->path()) {
+Train::Train(metro_simulation::Train *train, const std::unordered_map<int64_t, Section> &sections)
+    : train_(train),
+      path_(train->path(), sections),
+      current_section_() {
 }
 
 void Train::Tick() {
-    if (train_->state() == metro_simulation::Train::PLATFORM) {
-        train_->set_section_completed_part(0.0);
-        const auto section_id = path_.NextSectionId(train_->section_id());
-        if (section_id) {
-            train_->set_section_id(*section_id);
-            train_->set_state(metro_simulation::Train::SECTION);
-        } else {
-            train_->set_state(metro_simulation::Train::IDLE);
+    switch (train_->state()) {
+        case metro_simulation::Train::PLATFORM: {
+            const auto section_maybe = path_.FindNextSection(train_->platform_id());
+            if (section_maybe) {
+                current_section_.emplace(*section_maybe);
+
+                const auto section = current_section_->section();
+                train_->set_platform_id(section.destination_platform_id());
+                train_->set_section_completed_meters(0);
+                train_->set_section_id(section.id());
+                train_->set_state(metro_simulation::Train::SECTION);
+            } else {
+                current_section_.reset();
+                train_->set_state(metro_simulation::Train::IDLE);
+            }
+            break;
         }
-    } else {
-        const double section_completed_part = train_->section_completed_part() + rate;
-        if (section_completed_part >= 1.0) {
-            train_->set_section_completed_part(1.0);
-            train_->set_state(metro_simulation::Train::PLATFORM);
-        } else {
-            train_->set_section_completed_part(section_completed_part);
+        case metro_simulation::Train::SECTION: {
+            const int64_t completed = train_->section_completed_meters() + train_->meters_per_second();
+            const int64_t section_length = current_section_->section().length();
+            if (completed >= section_length) {
+                train_->set_state(metro_simulation::Train::PLATFORM);
+            }
+            train_->set_section_completed_meters(completed);
+            break;
+        }
+        default: {
+            break;
         }
     }
 }

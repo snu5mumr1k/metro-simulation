@@ -24,8 +24,8 @@ message Station {
 message Section {
     int64 id = 1;
 
-    int64 start_platform_id = 2;
-    int64 finish_platform_id = 3;
+    int64 origin_platform_id = 2;
+    int64 destination_platform_id = 3;
 
     int64 length = 4;
 }
@@ -42,21 +42,21 @@ message Platform {
 message Train {
     int64 id = 1;
 
+    int64 meters_per_second = 2;
+    Path path = 3;
+
     enum State {
         PLATFORM = 0;
         SECTION = 1;
         IDLE = 2;
     }
 
-    double section_completed_part = 2;
-
-    int64 platform_id = 3;
-    int64 section_id = 4;
-
-    Path path = 5;
-    State state = 6;
+    int64 section_completed_meters = 4;
+    int64 platform_id = 5;
+    int64 section_id = 6;
+    State state = 7;
 }
 
 message Path {
-    repeated int64 section_ids = 1;
+    map<int64, int64> next_step = 1;
 }

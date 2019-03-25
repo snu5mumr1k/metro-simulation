@@ -9,6 +9,8 @@ public:
 
     void Tick();
 
+    const metro_simulation::Section &section() const;
+
 private:
     metro_simulation::Section *section_;
 };

@@ -14,7 +14,7 @@ Line::Line(metro_simulation::Line *line) : line_(line) {
     }
 
     for (auto &train : *line->mutable_trains()) {
-        trains_.emplace(train.id(), Train(&train));
+        trains_.emplace(train.id(), Train(&train, sections_));
     }
 }
 

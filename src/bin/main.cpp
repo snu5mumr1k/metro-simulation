@@ -22,7 +22,7 @@ int main() {
     graphics::SDL *sdl = Singleton<graphics::SDL>();
 
     bool quit = false;
-    const auto sleep_time = 1s;
+    const auto sleep_time = 33ms;
     std::optional<metro_simulation::Config> config = metro_simulation::Config();
     core::Simulator simulator(*config);
     while (!quit) {

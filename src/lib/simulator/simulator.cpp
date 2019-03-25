@@ -23,21 +23,25 @@ metro_simulation::Metro GenerateMetro() {
 
     station2->add_platforms();
     auto platform2 = station2->mutable_platforms(0);
-    platform2->set_id(0);
+    platform2->set_id(1);
 
     line->add_sections();
     auto section = line->mutable_sections(0);
     section->set_id(0);
-    section->set_start_platform_id(platform1->id());
-    section->set_finish_platform_id(platform2->id());
+    section->set_origin_platform_id(platform1->id());
+    section->set_destination_platform_id(platform2->id());
+    section->set_length(2000);
 
     line->add_trains();
     auto train = line->mutable_trains(0);
     train->set_id(0);
-    train->set_section_completed_part(0.5);
+    train->set_meters_per_second(18);
+    train->set_state(metro_simulation::Train::PLATFORM);
+    train->set_platform_id(section->origin_platform_id());
 
     auto path = train->mutable_path();
-    path->add_section_ids(0);
+    auto next_step = path->mutable_next_step();
+    next_step->insert({section->origin_platform_id(), section->id()});
 
     return result;
 }

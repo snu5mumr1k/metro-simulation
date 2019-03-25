@@ -1,22 +1,16 @@
 #include "path.h"
 
 namespace core {
-Path::Path(const metro_simulation::Path &path) : path_(path)
-{}
+Path::Path(const metro_simulation::Path &path, const std::unordered_map<int64_t, Section> &sections)
+    : path_(path),
+      sections_(sections) {
+}
 
-std::optional<int64_t> Path::NextSectionId(int64_t section_id) const {
-    bool found = false;
-    std::optional<int64_t> result;
-    for (int64_t s : path_.section_ids()) {
-        if (found) {
-            result = s;
-            break;
-        }
-        if (s == section_id) {
-            found = true;
-        }
+std::optional<const Section> Path::FindNextSection(int64_t platform_id) const {
+    const auto section_id = path_.next_step().find(platform_id);
+    if (section_id != path_.next_step().end()) {
+        return sections_.at(section_id->second);
     }
-
-    return result;
+    return {};
 }
 }  // namespace core

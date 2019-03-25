@@ -129,15 +129,15 @@ namespace graphics {
             for (const auto& train : line.trains()) {
                 switch (train.state()) {
                     case metro_simulation::Train::IDLE: {
-                        ImGui::Text("Train %lld is idle", train.id());
+                        ImGui::Text("Train %lld is idle at %lld", train.id(), train.platform_id());
                         break;
                     }
                     case metro_simulation::Train::SECTION: {
-                        ImGui::Text("Train %lld at %.2lf part of section", train.id(), train.section_completed_part());
+                        ImGui::Text("Train %lld completed %lld/%lld", train.id(), train.section_completed_meters(), 0);
                         break;
                     }
                     case metro_simulation::Train::PLATFORM: {
-                        ImGui::Text("Train %lld is at the platform", train.id());
+                        ImGui::Text("Train %lld is at the platform %lld", train.id(), train.platform_id());
                         break;
                     }
                 }
