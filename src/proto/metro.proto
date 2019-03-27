@@ -54,7 +54,8 @@ message Train {
     int64 section_completed_meters = 4;
     int64 platform_id = 5;
     int64 section_id = 6;
-    State state = 7;
+    int64 arrived_at = 7;
+    State state = 8;
 }
 
 message Path {

@@ -1,3 +1,5 @@
+#include <ctime>
+
 #include <proto/metro.pb.h>
 
 #include "simulator.h"
@@ -38,6 +40,7 @@ metro_simulation::Metro GenerateMetro() {
     train->set_meters_per_second(18);
     train->set_state(metro_simulation::Train::PLATFORM);
     train->set_platform_id(section->origin_platform_id());
+    train->set_arrived_at(std::time(nullptr));
 
     auto path = train->mutable_path();
     auto next_step = path->mutable_next_step();

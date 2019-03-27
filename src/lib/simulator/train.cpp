@@ -1,4 +1,10 @@
+#include <ctime>
+
 #include "train.h"
+
+namespace {
+    constexpr int64_t SLEEP_TIME = 20;
+}
 
 namespace core {
 Train::Train(metro_simulation::Train *train, const std::unordered_map<int64_t, Section> &sections)
@@ -10,6 +16,10 @@ Train::Train(metro_simulation::Train *train, const std::unordered_map<int64_t, S
 void Train::Tick() {
     switch (train_->state()) {
         case metro_simulation::Train::PLATFORM: {
+            if (std::time(nullptr) - train_->arrived_at() < SLEEP_TIME) {
+                return;
+            }
+
             const auto section_maybe = path_.FindNextSection(train_->platform_id());
             if (section_maybe) {
                 current_section_.emplace(*section_maybe);
@@ -30,6 +40,7 @@ void Train::Tick() {
             const int64_t section_length = current_section_->section().length();
             if (completed >= section_length) {
                 train_->set_state(metro_simulation::Train::PLATFORM);
+                train_->set_arrived_at(std::time(nullptr));
             }
             train_->set_section_completed_meters(completed);
             break;
