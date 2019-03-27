@@ -20,7 +20,7 @@ public:
     SDL();
     ~SDL();
 
-    std::optional<metro_simulation::Config> DrawInterface(const metro_simulation::Config& config);
+    std::optional<metro_simulation::Config> DrawInterface(const metro_simulation::Config& config, const metro_simulation::Metro &metro);
     void Draw(const metro_simulation::Config& config, const metro_simulation::Metro& metro);
 
     void ClearBuffer();

@@ -90,7 +90,7 @@ namespace graphics {
         SDL_GL_SwapWindow(window_);
     }
 
-    std::optional<metro_simulation::Config> SDL::DrawInterface(const metro_simulation::Config& config) {
+    std::optional<metro_simulation::Config> SDL::DrawInterface(const metro_simulation::Config &config, const metro_simulation::Metro &metro) {
         std::optional<metro_simulation::Config> result = config;
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplSDL2_NewFrame(window_);
@@ -104,19 +104,6 @@ namespace graphics {
             ImGui::EndMainMenuBar();
         }
 
-        SDL_Event sdl_event;
-        while (SDL_PollEvent(&sdl_event) != 0) {
-            switch (sdl_event.type) {
-                case SDL_QUIT: {
-                    result = {};
-                    break;
-                }
-            }
-        }
-        return result;
-    }
-
-    void SDL::Draw(const metro_simulation::Config& config, const metro_simulation::Metro& metro) {
         ImGui::Begin("Train positions");
         std::unordered_map<int64_t, std::vector<const metro_simulation::Train *>> sectionsTrains;
         std::unordered_map<int64_t, std::vector<const metro_simulation::Train *>> platformsTrains;
@@ -159,5 +146,19 @@ namespace graphics {
             }
         }
         ImGui::End();
+
+        SDL_Event sdl_event;
+        while (SDL_PollEvent(&sdl_event) != 0) {
+            switch (sdl_event.type) {
+                case SDL_QUIT: {
+                    result = {};
+                    break;
+                }
+            }
+        }
+        return result;
+    }
+
+    void SDL::Draw(const metro_simulation::Config& config, const metro_simulation::Metro& metro) {
     }
 }  // namespace graphics

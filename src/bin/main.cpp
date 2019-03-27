@@ -26,7 +26,7 @@ int main() {
     std::optional<metro_simulation::Config> config = metro_simulation::Config();
     core::Simulator simulator(*config);
     while (!quit) {
-        config = sdl->DrawInterface(*config);
+        config = sdl->DrawInterface(*config, simulator.metro());
         if (!config) {
             quit = true;
         } else {
