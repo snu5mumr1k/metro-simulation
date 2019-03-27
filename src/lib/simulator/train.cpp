@@ -3,7 +3,7 @@
 #include "train.h"
 
 namespace {
-    constexpr int64_t SLEEP_TIME = 20;
+    constexpr int64_t SLEEP_TIME = 5;
 }
 
 namespace core {
