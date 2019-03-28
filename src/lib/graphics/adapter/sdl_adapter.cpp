@@ -101,6 +101,12 @@ namespace graphics {
             if (ImGui::MenuItem("Quit", "Alt+F4")) {
                 result = {};
             }
+            if (ImGui::MenuItem("Reset to defaults")) {
+                result->set_reset_to_defaults(true);
+            }
+            if (ImGui::MenuItem("Reset to beginning")) {
+                result->set_reset_to_beginning(true);
+            }
             ImGui::EndMainMenuBar();
         }
 

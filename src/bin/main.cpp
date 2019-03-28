@@ -11,9 +11,19 @@
 #include <lib/simulator/simulator.h>
 #include <lib/util/singleton/singleton.h>
 
-void DumpMetro(const metro_simulation::Metro& metro, const std::string& filename) {
+
+template<class TProto>
+void Dump(const TProto& proto, const std::string& filename) {
     std::ofstream out(filename);
-    metro.SerializeToOstream(&out);
+    proto.SerializeToOstream(&out);
+}
+
+template<class TProto>
+TProto Load(const std::string& filename) {
+    std::ifstream in(filename);
+    TProto proto;
+    proto.ParseFromIstream(&in);
+    return proto;
 }
 
 int main() {
@@ -23,14 +33,26 @@ int main() {
 
     bool quit = false;
     const auto sleep_time = 33ms;
-    std::optional<metro_simulation::Config> config = metro_simulation::Config();
-    core::Simulator simulator(*config);
+
+    std::optional<metro_simulation::Config> config = Load<metro_simulation::Config>("../config.json");
+    const auto metro = Load<metro_simulation::Metro>("../metro.json");
+    core::Simulator simulator(metro);
     while (!quit) {
-        config = sdl->DrawInterface(*config, simulator.metro());
-        if (!config) {
+        auto new_config = sdl->DrawInterface(*config, simulator.metro());
+        if (!new_config) {
             quit = true;
         } else {
             simulator.Tick();
+        }
+
+        config.swap(new_config);
+
+        if (config->reset_to_beginning()) {
+            simulator.Reset(metro);
+            config->set_reset_to_beginning(false);
+        } else if (config->reset_to_defaults()) {
+            simulator.Reset();
+            config->set_reset_to_defaults(false);
         }
 
         sdl->Draw(*config, simulator.metro());
@@ -39,5 +61,6 @@ int main() {
 
         std::this_thread::sleep_for(sleep_time);
     }
-    DumpMetro(simulator.metro(), "./metro.json");
+    Dump(simulator.metro(), "../metro.json");
+    Dump(*config, "../config.json");
 }

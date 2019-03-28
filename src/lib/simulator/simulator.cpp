@@ -51,13 +51,23 @@ metro_simulation::Metro GenerateMetro() {
 }  // namespace
 
 namespace core {
-Simulator::Simulator(const metro_simulation::Config &config)
-    : metro_data_(GenerateMetro()),
+Simulator::Simulator(metro_simulation::Metro metro_data)
+    : metro_data_(metro_data),
       metro_(&metro_data_)
 {}
 
 const metro_simulation::Metro &Simulator::metro() const {
     return metro_.metro();
+}
+
+void Simulator::Reset() {
+    metro_data_ = GenerateMetro();
+    metro_ = Metro(&metro_data_);
+}
+
+void Simulator::Reset(metro_simulation::Metro metro_data) {
+    metro_data_ = metro_data;
+    metro_ = Metro(&metro_data_);
 }
 
 void Simulator::Tick() {

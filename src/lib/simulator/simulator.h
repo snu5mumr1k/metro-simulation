@@ -7,8 +7,10 @@
 namespace core {
 class Simulator {
 public:
-    Simulator(const metro_simulation::Config &config);
+    Simulator(metro_simulation::Metro metro_data);
 
+    void Reset();
+    void Reset(metro_simulation::Metro metro_data);
     void Tick();
 
     const metro_simulation::Metro &metro() const;
