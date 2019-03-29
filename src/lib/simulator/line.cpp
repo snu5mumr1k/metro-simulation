@@ -18,9 +18,9 @@ Line::Line(metro_simulation::Line *line) : line_(line) {
     }
 }
 
-void Line::Tick() {
+void Line::Tick(const metro_simulation::Config &config) {
     for (auto &[_, train] : trains_) {
-        train.Tick();
+        train.Tick(config);
     }
 }
 }  // namespace core

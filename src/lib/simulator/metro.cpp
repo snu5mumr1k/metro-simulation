@@ -7,9 +7,9 @@ Metro::Metro(metro_simulation::Metro *metro) : metro_(metro) {
     }
 }
 
-void Metro::Tick() {
+void Metro::Tick(const metro_simulation::Config &config) {
     for (auto &line : lines_) {
-        line.Tick();
+        line.Tick(config);
     }
 }
 

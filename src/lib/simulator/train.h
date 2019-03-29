@@ -3,6 +3,7 @@
 #include <optional>
 
 #include <proto/metro.pb.h>
+#include <proto/config.pb.h>
 
 #include "path.h"
 #include "section.h"
@@ -12,7 +13,7 @@ class Train {
 public:
     Train(metro_simulation::Train *train, const std::unordered_map<int64_t, Section> &sections);
 
-    void Tick();
+    void Tick(const metro_simulation::Config &config);
 
 private:
     metro_simulation::Train *train_;

@@ -11,7 +11,7 @@ public:
 
     void Reset();
     void Reset(metro_simulation::Metro metro_data);
-    void Tick();
+    void Tick(const metro_simulation::Config &config);
 
     const metro_simulation::Metro &metro() const;
 

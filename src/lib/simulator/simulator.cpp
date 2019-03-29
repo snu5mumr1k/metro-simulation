@@ -70,7 +70,7 @@ void Simulator::Reset(metro_simulation::Metro metro_data) {
     metro_ = Metro(&metro_data_);
 }
 
-void Simulator::Tick() {
-    metro_.Tick();
+void Simulator::Tick(const metro_simulation::Config &config) {
+    metro_.Tick(config);
 }
 }  // namespace core

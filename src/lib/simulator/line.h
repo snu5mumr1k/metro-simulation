@@ -3,6 +3,7 @@
 #include <unordered_map>
 
 #include <proto/metro.pb.h>
+#include <proto/config.pb.h>
 
 #include "platform.h"
 #include "section.h"
@@ -14,7 +15,7 @@ class Line {
 public:
     Line(metro_simulation::Line *line);
 
-    void Tick();
+    void Tick(const metro_simulation::Config &config);
 
 private:
     metro_simulation::Line *line_;

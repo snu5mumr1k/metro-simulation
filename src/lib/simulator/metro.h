@@ -3,6 +3,7 @@
 #include <vector>
 
 #include <proto/metro.pb.h>
+#include <proto/config.pb.h>
 
 #include "line.h"
 
@@ -11,7 +12,7 @@ class Metro {
 public:
     Metro(metro_simulation::Metro *metro);
 
-    void Tick();
+    void Tick(const metro_simulation::Config &config);
 
     const metro_simulation::Metro &metro() const;
 
