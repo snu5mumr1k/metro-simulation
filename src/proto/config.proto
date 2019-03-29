@@ -5,4 +5,6 @@ package metro_simulation;
 message Config {
     bool reset_to_defaults = 1;
     bool reset_to_beginning = 2;
+
+    int32 fps = 3;
 }

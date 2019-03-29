@@ -32,23 +32,21 @@ int main() {
     graphics::SDL *sdl = Singleton<graphics::SDL>();
 
     bool quit = false;
-    const auto sleep_time = 33ms;
 
     std::optional<metro_simulation::Config> config = Load<metro_simulation::Config>("../config.json");
     const auto metro = Load<metro_simulation::Metro>("../metro.json");
     core::Simulator simulator(metro);
-    while (!quit) {
+    while (true) {
         sdl->ClearBuffer();
         auto new_config = sdl->DrawInterface(*config, simulator.metro());
         sdl->Draw(*config, simulator.metro());
         sdl->SwapBuffers();
 
         if (!new_config) {
-            quit = true;
-        } else {
-            simulator.Tick();
+            break;
         }
 
+        simulator.Tick();
         config.swap(new_config);
 
         if (config->reset_to_beginning()) {
@@ -59,6 +57,7 @@ int main() {
             config->set_reset_to_defaults(false);
         }
 
+        const auto sleep_time = std::chrono::milliseconds(static_cast<int64_t>(1.0 / config->fps()));
         std::this_thread::sleep_for(sleep_time);
     }
     Dump(simulator.metro(), "../metro.json");

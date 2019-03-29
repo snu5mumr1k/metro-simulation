@@ -12,7 +12,6 @@
 
 namespace {
 void GenerateTextMetroRepresentation(const metro_simulation::Metro &metro) {
-    ImGui::Begin("Train positions");
     std::unordered_map<int64_t, std::vector<const metro_simulation::Train *>> sectionsTrains;
     std::unordered_map<int64_t, std::vector<const metro_simulation::Train *>> platformsTrains;
     for (const auto &line : metro.lines()) {
@@ -31,6 +30,8 @@ void GenerateTextMetroRepresentation(const metro_simulation::Metro &metro) {
             }
         }
     }
+
+    ImGui::Begin("Train positions");
     for (const auto &line : metro.lines()) {
         ImGui::Text("Line %lld", line.id());
         for (const auto &section : line.sections()) {
@@ -57,6 +58,13 @@ void GenerateTextMetroRepresentation(const metro_simulation::Metro &metro) {
 }
 
 metro_simulation::Config GenerateConfigMenu(metro_simulation::Config result) {
+    ImGui::Begin("Configuration");
+
+    int32_t fps = result.fps();
+    ImGui::DragInt("Frames per second", &fps, 1.0f, 20, 60);
+    result.set_fps(fps);
+
+    ImGui::End();
     return result;
 }
 }  // namespace
