@@ -38,7 +38,11 @@ int main() {
     const auto metro = Load<metro_simulation::Metro>("../metro.json");
     core::Simulator simulator(metro);
     while (!quit) {
+        sdl->ClearBuffer();
         auto new_config = sdl->DrawInterface(*config, simulator.metro());
+        sdl->Draw(*config, simulator.metro());
+        sdl->SwapBuffers();
+
         if (!new_config) {
             quit = true;
         } else {
@@ -54,10 +58,6 @@ int main() {
             simulator.Reset();
             config->set_reset_to_defaults(false);
         }
-
-        sdl->Draw(*config, simulator.metro());
-
-        sdl->SwapBuffers();
 
         std::this_thread::sleep_for(sleep_time);
     }

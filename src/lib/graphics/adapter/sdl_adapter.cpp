@@ -10,6 +10,57 @@
 #include <stdexcept>
 #include <string>
 
+namespace {
+void GenerateTextMetroRepresentation(const metro_simulation::Metro &metro) {
+    ImGui::Begin("Train positions");
+    std::unordered_map<int64_t, std::vector<const metro_simulation::Train *>> sectionsTrains;
+    std::unordered_map<int64_t, std::vector<const metro_simulation::Train *>> platformsTrains;
+    for (const auto &line : metro.lines()) {
+        for (const auto &train : line.trains()) {
+            switch (train.state()) {
+                case metro_simulation::Train::SECTION: {
+                    sectionsTrains[train.section_id()].push_back(&train);
+                    break;
+                }
+                case metro_simulation::Train::PLATFORM: {
+                    platformsTrains[train.section_id()].push_back(&train);
+                    break;
+                }
+                default:
+                    break;
+            }
+        }
+    }
+    for (const auto &line : metro.lines()) {
+        ImGui::Text("Line %lld", line.id());
+        for (const auto &section : line.sections()) {
+            ImGui::Text("Section %lld", section.id());
+            for (const auto *train : sectionsTrains[section.id()]) {
+                ImGui::Text("Train %lld completed %lld/%lld", train->id(), train->section_completed_meters(), section.length());
+            }
+        }
+        for (const auto &station : line.stations()) {
+            ImGui::Text("Station %lld", station.id());
+            for (const auto &platform : station.platforms()) {
+                for (const auto *train : platformsTrains[platform.id()]) {
+                    ImGui::Text("Train %lld is at the platform %lld", train->id(), platform.id());
+                }
+            }
+        }
+        for (const auto &train : line.trains()) {
+            if (train.state() == metro_simulation::Train::IDLE) {
+                ImGui::Text("Train %lld is idle at %lld", train.id(), train.platform_id());
+            }
+        }
+    }
+    ImGui::End();
+}
+
+metro_simulation::Config GenerateConfigMenu(metro_simulation::Config result) {
+    return result;
+}
+}  // namespace
+
 namespace graphics {
     SDL::SDL()
         : width_(0),
@@ -56,7 +107,6 @@ namespace graphics {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glEnable(GL_DEPTH_TEST);
 
-
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
 
@@ -78,24 +128,19 @@ namespace graphics {
 
     void SDL::ClearBuffer() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        SDL_GL_MakeCurrent(window_, gl_context_);
     }
 
     void SDL::SwapBuffers() {
-        ImGuiIO& io = ImGui::GetIO();
-        ImGui::Render();
-        SDL_GL_MakeCurrent(window_, gl_context_);
-        glViewport(0, 0, static_cast<int>(io.DisplaySize.x), static_cast<int>(io.DisplaySize.y));
-        glClear(GL_COLOR_BUFFER_BIT);
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         SDL_GL_SwapWindow(window_);
     }
 
     std::optional<metro_simulation::Config> SDL::DrawInterface(const metro_simulation::Config &config, const metro_simulation::Metro &metro) {
-        std::optional<metro_simulation::Config> result = config;
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplSDL2_NewFrame(window_);
         ImGui::NewFrame();
 
+        std::optional<metro_simulation::Config> result = GenerateConfigMenu(config);
 
         if (ImGui::BeginMainMenuBar()) {
             if (ImGui::MenuItem("Quit", "Alt+F4")) {
@@ -110,48 +155,7 @@ namespace graphics {
             ImGui::EndMainMenuBar();
         }
 
-        ImGui::Begin("Train positions");
-        std::unordered_map<int64_t, std::vector<const metro_simulation::Train *>> sectionsTrains;
-        std::unordered_map<int64_t, std::vector<const metro_simulation::Train *>> platformsTrains;
-        for (const auto &line : metro.lines()) {
-            for (const auto &train : line.trains()) {
-                switch (train.state()) {
-                    case metro_simulation::Train::SECTION: {
-                        sectionsTrains[train.section_id()].push_back(&train);
-                        break;
-                    }
-                    case metro_simulation::Train::PLATFORM: {
-                        platformsTrains[train.section_id()].push_back(&train);
-                        break;
-                    }
-                    default:
-                        break;
-                }
-            }
-        }
-        for (const auto &line : metro.lines()) {
-            ImGui::Text("Line %lld", line.id());
-            for (const auto &section : line.sections()) {
-                ImGui::Text("Section %lld", section.id());
-                for (const auto *train : sectionsTrains[section.id()]) {
-                    ImGui::Text("Train %lld completed %lld/%lld", train->id(), train->section_completed_meters(), section.length());
-                }
-            }
-            for (const auto &station : line.stations()) {
-                ImGui::Text("Station %lld", station.id());
-                for (const auto &platform : station.platforms()) {
-                    for (const auto *train : platformsTrains[platform.id()]) {
-                        ImGui::Text("Train %lld is at the platform %lld", train->id(), platform.id());
-                    }
-                }
-            }
-            for (const auto &train : line.trains()) {
-                if (train.state() == metro_simulation::Train::IDLE) {
-                    ImGui::Text("Train %lld is idle at %lld", train.id(), train.platform_id());
-                }
-            }
-        }
-        ImGui::End();
+        GenerateTextMetroRepresentation(metro);
 
         SDL_Event sdl_event;
         while (SDL_PollEvent(&sdl_event) != 0) {
@@ -162,6 +166,10 @@ namespace graphics {
                 }
             }
         }
+        ImGuiIO& io = ImGui::GetIO();
+        ImGui::Render();
+        glViewport(0, 0, static_cast<int>(io.DisplaySize.x), static_cast<int>(io.DisplaySize.y));
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         return result;
     }
 
