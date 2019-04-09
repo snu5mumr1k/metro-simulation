@@ -2,12 +2,13 @@
 
 #include <external/gl/gl_core_3_3.h>
 
-#include <SDL.h>
-#include <SDL_opengl.h>
-#include <external/imgui/imgui.h>
-
 #include <optional>
 #include <string>
+
+#include <SDL.h>
+#include <SDL_opengl.h>
+
+#include <external/imgui/imgui.h>
 
 namespace metro_simulation {
 class Metro;

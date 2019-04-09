@@ -1,14 +1,16 @@
+// XXX: Has to be included first
 #include "sdl_adapter.h"
 
-#include <proto/config.pb.h>
-#include <proto/metro.pb.h>
-
-#include <external/imgui/examples/imgui_impl_opengl3.h>
-#include <external/imgui/examples/imgui_impl_sdl.h>
 
 #include <optional>
 #include <stdexcept>
 #include <string>
+
+#include <external/imgui/examples/imgui_impl_opengl3.h>
+#include <external/imgui/examples/imgui_impl_sdl.h>
+
+#include <proto/config.pb.h>
+#include <proto/metro.pb.h>
 
 namespace {
 void GenerateTextMetroRepresentation(const metro_simulation::Metro &metro) {
@@ -57,7 +59,7 @@ void GenerateTextMetroRepresentation(const metro_simulation::Metro &metro) {
     ImGui::End();
 }
 
-metro_simulation::Config GenerateConfigMenu(metro_simulation::Config result) {
+metro_simulation::Config GenerateConfigMenuRepresentation(metro_simulation::Config result) {
     ImGui::Begin("Configuration");
 
     int32_t frames_per_second = result.frames_per_second();
@@ -158,7 +160,7 @@ namespace graphics {
         ImGui_ImplSDL2_NewFrame(window_);
         ImGui::NewFrame();
 
-        std::optional<metro_simulation::Config> result = GenerateConfigMenu(config);
+        std::optional<metro_simulation::Config> result = GenerateConfigMenuRepresentation(config);
 
         if (ImGui::BeginMainMenuBar()) {
             if (ImGui::MenuItem("Quit", "Alt+F4")) {

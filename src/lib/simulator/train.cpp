@@ -34,7 +34,7 @@ void Train::Tick(const metro_simulation::Config &config) {
             break;
         }
         case metro_simulation::Train::SECTION: {
-            const int64_t completed = train_->section_completed_meters() + train_->meters_per_second();
+            const int64_t completed = train_->section_completed_meters() + train_->meters_per_second() * config.tick_simulation_seconds();
             const int64_t section_length = current_section_->section().length();
             if (completed >= section_length) {
                 train_->set_state(metro_simulation::Train::PLATFORM);

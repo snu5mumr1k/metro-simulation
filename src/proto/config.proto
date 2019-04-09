@@ -12,3 +12,7 @@ message Config {
     int64 current_simulation_timestamp = 5;
     int64 tick_simulation_seconds = 6;
 }
+
+message MetroConfig {
+    int64 train_stay_time = 1;
+}
