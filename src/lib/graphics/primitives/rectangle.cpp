@@ -1,11 +1,9 @@
-#include <stdexcept>
-
 #include <external/gl/gl_core_3_3.h>
-
 #include <lib/graphics/shader/shader.h>
 
-#include "rectangle.h"
+#include <stdexcept>
 
+#include "rectangle.h"
 
 void DrawRectangle(
         const std::array<float, 2> &top_left,

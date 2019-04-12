@@ -1,20 +1,19 @@
 #pragma once
 
+#include <proto/config.pb.h>
+#include <proto/metro.pb.h>
+
 #include <external/gl/gl_core_3_3.h>
+#include <external/imgui/imgui.h>
 
 #include <string>
 
 #include <SDL.h>
 #include <SDL_opengl.h>
 
-#include <external/imgui/imgui.h>
-
-#include <proto/config.pb.h>
-#include <proto/metro.pb.h>
-
 namespace graphics {
 class SDL {
-public:
+ public:
     enum class Action {
         Quit,
         ResetToDefaults,
@@ -25,16 +24,16 @@ public:
     SDL();
     ~SDL();
 
-    metro_simulation::Config EditConfig(const metro_simulation::Config& config) const;
-    metro_simulation::Metro EditMetro(const metro_simulation::Metro& metro) const;
+    metro_simulation::Config EditConfig(const metro_simulation::Config &config) const;
+    metro_simulation::Metro EditMetro(const metro_simulation::Metro &metro) const;
 
     Action DrawInterface() const;
-    void Draw(const metro_simulation::Config& config, const metro_simulation::Metro& metro) const ;
+    void Draw(const metro_simulation::Config &config, const metro_simulation::Metro &metro) const;
 
     void InitFrame();
     void FinishFrame();
 
-private:
+ private:
     int width_;
     int height_;
 

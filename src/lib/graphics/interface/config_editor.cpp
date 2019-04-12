@@ -17,7 +17,12 @@ metro_simulation::Config EditConfig(metro_simulation::Config result) {
     int64_t tick_simulation_seconds = result.tick_simulation_seconds();
     const int64_t min_simulation_seconds = 1;
     const int64_t max_simulation_seconds = 5;
-    ImGui::SliderScalar("Tick duration (in simulation)", ImGuiDataType_S64, &tick_simulation_seconds, &min_simulation_seconds, &max_simulation_seconds);
+    ImGui::SliderScalar(
+        "Tick duration (in simulation)",
+        ImGuiDataType_S64,
+        &tick_simulation_seconds,
+        &min_simulation_seconds,
+        &max_simulation_seconds);
     result.set_tick_simulation_seconds(tick_simulation_seconds);
 
     ImGui::End();

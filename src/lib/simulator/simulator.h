@@ -6,8 +6,8 @@
 
 namespace core {
 class Simulator {
-public:
-    Simulator(metro_simulation::Metro metro_data);
+ public:
+    explicit Simulator(metro_simulation::Metro metro_data);
 
     void Reset();
     void Reset(metro_simulation::Metro metro_data);
@@ -15,7 +15,7 @@ public:
 
     const metro_simulation::Metro &metro() const;
 
-private:
+ private:
     metro_simulation::Metro metro_data_;
     Metro metro_;
 };

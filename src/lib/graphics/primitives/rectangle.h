@@ -1,8 +1,8 @@
 #pragma once
 
-#include <array>
-
 #include <lib/graphics/texture/texture.h>
+
+#include <array>
 
 void DrawRectangle(
     const std::array<float, 2> &top_left,

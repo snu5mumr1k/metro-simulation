@@ -4,14 +4,14 @@
 
 namespace core {
 class Section {
-public:
-    Section(metro_simulation::Section *section);
+ public:
+    explicit Section(metro_simulation::Section *section);
 
     void Tick();
 
     const metro_simulation::Section &section() const;
 
-private:
+ private:
     metro_simulation::Section *section_;
 };
 }  // namespace core

@@ -1,6 +1,9 @@
-#include "metro_representation.h"
-
 #include <external/imgui/imgui.h>
+
+#include <unordered_map>
+#include <vector>
+
+#include "metro_representation.h"
 
 namespace graphics {
 void GenerateTextMetroRepresentation(const metro_simulation::Metro &metro) {
@@ -29,7 +32,8 @@ void GenerateTextMetroRepresentation(const metro_simulation::Metro &metro) {
         for (const auto &section : line.sections()) {
             ImGui::Text("Section %lld", section.id());
             for (const auto *train : sectionsTrains[section.id()]) {
-                ImGui::Text("Train %lld completed %lld/%lld", train->id(), train->section_completed_meters(), section.length());
+                ImGui::Text(
+                    "Train %lld completed %lld/%lld", train->id(), train->section_completed_meters(), section.length());
             }
         }
         for (const auto &station : line.stations()) {

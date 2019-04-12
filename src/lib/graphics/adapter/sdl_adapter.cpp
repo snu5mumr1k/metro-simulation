@@ -1,20 +1,16 @@
 // XXX: Has to be included first
 #include "sdl_adapter.h"
 
-#include <optional>
-#include <stdexcept>
-#include <string>
-
 #include <external/imgui/examples/imgui_impl_opengl3.h>
 #include <external/imgui/examples/imgui_impl_sdl.h>
-
-#include <proto/config.pb.h>
-#include <proto/metro.pb.h>
 
 #include <lib/graphics/interface/config_editor.h>
 #include <lib/graphics/interface/metro_editor.h>
 #include <lib/graphics/interface/metro_representation.h>
 #include <lib/graphics/primitives/rectangle.h>
+
+#include <sstream>
+#include <stdexcept>
 
 
 namespace graphics {
@@ -34,7 +30,11 @@ namespace graphics {
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, context_minor_version_);
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
-        window_ = SDL_CreateWindow("Metro simulation", 0, 0, width_, height_, SDL_WINDOW_FULLSCREEN_DESKTOP | SDL_WINDOW_OPENGL);
+        window_ = SDL_CreateWindow(
+            "Metro simulation",
+            0, 0,
+            width_, height_,
+            SDL_WINDOW_FULLSCREEN_DESKTOP | SDL_WINDOW_OPENGL);
         if (window_ == nullptr) {
             throw std::runtime_error("Window couldn't be created! SDL_Error: " + std::string(SDL_GetError()));
         }
@@ -54,9 +54,11 @@ namespace graphics {
         SDL_GL_GetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, &received_major_version);
         SDL_GL_GetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, &received_minor_version);
         if (received_major_version != context_major_version_ || received_minor_version != context_minor_version_) {
-            const std::string requested = std::to_string(context_major_version_) + "." + std::to_string(context_minor_version_);
-            const std::string received = std::to_string(received_major_version) + "." + std::to_string(received_minor_version);
-            throw std::runtime_error("SDL created OpenGL context version " + received + " instead of " + requested);
+            std::stringstream error_message;
+            error_message << "SDL created OpenGL context version: ";
+            error_message << context_major_version_ << "." << context_minor_version_;
+            error_message << " instead of " << received_major_version << "." << received_minor_version;
+            throw std::runtime_error(error_message.str());
         }
 
         glEnable(GL_BLEND);
@@ -92,18 +94,18 @@ namespace graphics {
     }
 
     void SDL::FinishFrame() {
-        ImGuiIO& io = ImGui::GetIO();
+        ImGuiIO &io = ImGui::GetIO();
         ImGui::Render();
         glViewport(0, 0, static_cast<int>(io.DisplaySize.x), static_cast<int>(io.DisplaySize.y));
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         SDL_GL_SwapWindow(window_);
     }
 
-    metro_simulation::Config SDL::EditConfig(const metro_simulation::Config& config) const {
+    metro_simulation::Config SDL::EditConfig(const metro_simulation::Config &config) const {
         return graphics::EditConfig(config);
     }
 
-    metro_simulation::Metro SDL::EditMetro(const metro_simulation::Metro& metro) const {
+    metro_simulation::Metro SDL::EditMetro(const metro_simulation::Metro &metro) const {
         return graphics::EditMetro(metro);
     }
 
@@ -134,7 +136,7 @@ namespace graphics {
         return action;
     }
 
-    void SDL::Draw(const metro_simulation::Config& config, const metro_simulation::Metro& metro) const {
+    void SDL::Draw(const metro_simulation::Config &config, const metro_simulation::Metro &metro) const {
         graphics::GenerateTextMetroRepresentation(metro);
         static Texture station("textures/station.bmp");
 
@@ -143,7 +145,6 @@ namespace graphics {
             {0.05f, -0.05f},
             station,
             {0.f, 0.f},
-            {1.f, 1.f}
-        );
+            {1.f, 1.f});
     }
 }  // namespace graphics

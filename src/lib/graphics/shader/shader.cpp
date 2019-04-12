@@ -1,5 +1,6 @@
 #include <fstream>
 #include <stdexcept>
+#include <string>
 
 #include "shader.h"
 
@@ -38,8 +39,8 @@ GLuint LoadShader(const std::string &filename, GLenum type) {
         if (!error_length) {
             throw std::runtime_error("Cant get shader compilation error length");
         }
-        char error_body[error_length];
-        glGetShaderInfoLog(id, error_length, nullptr, error_body);
+        std::string error_body(error_length, '\0');
+        glGetShaderInfoLog(id, error_length, nullptr, error_body.data());
         throw std::runtime_error(error_body);
     }
 
@@ -65,8 +66,8 @@ GLuint LinkProgram(GLuint vertex_shader, GLuint fragment_shader) {
         if (!error_length) {
             throw std::runtime_error("Cant get OpenGL program linkage error length");
         }
-        char error_body[error_length];
-        glGetProgramInfoLog(id, error_length, nullptr, error_body);
+        std::string error_body(error_length, '\0');
+        glGetShaderInfoLog(id, error_length, nullptr, error_body.data());
         throw std::runtime_error(error_body);
     }
 
@@ -75,11 +76,10 @@ GLuint LinkProgram(GLuint vertex_shader, GLuint fragment_shader) {
 }  // namespace
 
 Shader::Shader(const std::string &vertex_shader_filename, const std::string &fragment_shader_filename):
-    program_(0),
-    vertex_shader_(0),
-    fragment_shader_(0),
-    locations_()
-{
+        program_(0),
+        vertex_shader_(0),
+        fragment_shader_(0),
+        locations_() {
     vertex_shader_ = LoadShader(vertex_shader_filename, GL_VERTEX_SHADER);
     fragment_shader_ = LoadShader(fragment_shader_filename, GL_FRAGMENT_SHADER);
     program_ = LinkProgram(vertex_shader_, fragment_shader_);

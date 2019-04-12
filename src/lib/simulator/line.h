@@ -1,9 +1,9 @@
 #pragma once
 
-#include <unordered_map>
-
 #include <proto/metro.pb.h>
 #include <proto/config.pb.h>
+
+#include <unordered_map>
 
 #include "platform.h"
 #include "section.h"
@@ -12,12 +12,12 @@
 
 namespace core {
 class Line {
-public:
-    Line(metro_simulation::Line *line);
+ public:
+    explicit Line(metro_simulation::Line *line);
 
     void Tick(const metro_simulation::Config &config);
 
-private:
+ private:
     metro_simulation::Line *line_;
 
     std::unordered_map<int64_t, Section> sections_;

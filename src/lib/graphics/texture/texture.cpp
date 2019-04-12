@@ -1,8 +1,9 @@
+#include "texture.h"
+
 #include <fstream>
 
-#include <lib/graphics/texture/texture.h>
-
 #include <SDL.h>
+
 
 Texture::Texture(const std::string &filename) : gl_id_(0) {
     SDL_Surface* image = SDL_LoadBMP(filename.c_str());

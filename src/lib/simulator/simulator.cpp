@@ -1,6 +1,6 @@
-#include <ctime>
-
 #include <proto/metro.pb.h>
+
+#include <ctime>
 
 #include "simulator.h"
 

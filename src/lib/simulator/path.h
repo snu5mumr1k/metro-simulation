@@ -1,19 +1,20 @@
 #pragma once
 
-#include <optional>
-
 #include <proto/metro.pb.h>
+
+#include <optional>
+#include <unordered_map>
 
 #include "section.h"
 
 namespace core {
 class Path {
-public:
+ public:
     Path(const metro_simulation::Path &path, const std::unordered_map<int64_t, Section> &sections);
 
     std::optional<const Section> FindNextSection(int64_t platform_id) const;
 
-private:
+ private:
     const metro_simulation::Path &path_;
 
     const std::unordered_map<int64_t, Section> &sections_;
