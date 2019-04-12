@@ -11,76 +11,11 @@
 #include <proto/config.pb.h>
 #include <proto/metro.pb.h>
 
+#include <lib/graphics/interface/config_editor.h>
+#include <lib/graphics/interface/metro_editor.h>
+#include <lib/graphics/interface/metro_representation.h>
 #include <lib/graphics/primitives/rectangle.h>
 
-namespace {
-void GenerateTextMetroRepresentation(const metro_simulation::Metro &metro) {
-    std::unordered_map<int64_t, std::vector<const metro_simulation::Train *>> sectionsTrains;
-    std::unordered_map<int64_t, std::vector<const metro_simulation::Train *>> platformsTrains;
-    for (const auto &line : metro.lines()) {
-        for (const auto &train : line.trains()) {
-            switch (train.state()) {
-                case metro_simulation::Train::SECTION: {
-                    sectionsTrains[train.section_id()].push_back(&train);
-                    break;
-                }
-                case metro_simulation::Train::PLATFORM: {
-                    platformsTrains[train.section_id()].push_back(&train);
-                    break;
-                }
-                default:
-                    break;
-            }
-        }
-    }
-
-    ImGui::Begin("Train positions");
-    for (const auto &line : metro.lines()) {
-        ImGui::Text("Line %lld", line.id());
-        for (const auto &section : line.sections()) {
-            ImGui::Text("Section %lld", section.id());
-            for (const auto *train : sectionsTrains[section.id()]) {
-                ImGui::Text("Train %lld completed %lld/%lld", train->id(), train->section_completed_meters(), section.length());
-            }
-        }
-        for (const auto &station : line.stations()) {
-            ImGui::Text("Station %lld", station.id());
-            for (const auto &platform : station.platforms()) {
-                for (const auto *train : platformsTrains[platform.id()]) {
-                    ImGui::Text("Train %lld is at the platform %lld", train->id(), platform.id());
-                }
-            }
-        }
-        for (const auto &train : line.trains()) {
-            if (train.state() == metro_simulation::Train::IDLE) {
-                ImGui::Text("Train %lld is idle at %lld", train.id(), train.platform_id());
-            }
-        }
-    }
-    ImGui::End();
-}
-
-metro_simulation::Config GenerateConfigMenuRepresentation(metro_simulation::Config result) {
-    ImGui::Begin("Configuration");
-
-    int32_t frames_per_second = result.frames_per_second();
-    ImGui::SliderInt("Frames per second", &frames_per_second, 20, 60);
-    result.set_frames_per_second(frames_per_second);
-
-    int32_t ticks_per_frame = result.ticks_per_frame();
-    ImGui::SliderInt("Ticks per frame", &ticks_per_frame, 0, 20);
-    result.set_ticks_per_frame(ticks_per_frame);
-
-    int64_t tick_simulation_seconds = result.tick_simulation_seconds();
-    const int64_t min_simulation_seconds = 1;
-    const int64_t max_simulation_seconds = 5;
-    ImGui::SliderScalar("Tick duration (in simulation)", ImGuiDataType_S64, &tick_simulation_seconds, &min_simulation_seconds, &max_simulation_seconds);
-    result.set_tick_simulation_seconds(tick_simulation_seconds);
-
-    ImGui::End();
-    return result;
-}
-}  // namespace
 
 namespace graphics {
     SDL::SDL()
@@ -147,59 +82,65 @@ namespace graphics {
         SDL_Quit();
     }
 
-    void SDL::ClearBuffer() {
+    void SDL::InitFrame() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         SDL_GL_MakeCurrent(window_, gl_context_);
-    }
 
-    void SDL::SwapBuffers() {
-        SDL_GL_SwapWindow(window_);
-    }
-
-    std::optional<metro_simulation::Config> SDL::DrawInterface(const metro_simulation::Config &config, const metro_simulation::Metro &metro) {
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplSDL2_NewFrame(window_);
         ImGui::NewFrame();
+    }
 
-        std::optional<metro_simulation::Config> result = GenerateConfigMenuRepresentation(config);
+    void SDL::FinishFrame() {
+        ImGuiIO& io = ImGui::GetIO();
+        ImGui::Render();
+        glViewport(0, 0, static_cast<int>(io.DisplaySize.x), static_cast<int>(io.DisplaySize.y));
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        SDL_GL_SwapWindow(window_);
+    }
 
+    metro_simulation::Config SDL::EditConfig(const metro_simulation::Config& config) const {
+        return graphics::EditConfig(config);
+    }
+
+    metro_simulation::Metro SDL::EditMetro(const metro_simulation::Metro& metro) const {
+        return graphics::EditMetro(metro);
+    }
+
+    SDL::Action SDL::DrawInterface() const {
+        Action action = Action::Idle;
         if (ImGui::BeginMainMenuBar()) {
             if (ImGui::MenuItem("Quit", "Alt+F4")) {
-                result = {};
+                action = Action::Quit;
             }
             if (ImGui::MenuItem("Reset to defaults")) {
-                result->set_reset_to_defaults(true);
+                action = Action::ResetToDefaults;
             }
             if (ImGui::MenuItem("Reset to beginning")) {
-                result->set_reset_to_beginning(true);
+                action = Action::ResetToBeginning;
             }
             ImGui::EndMainMenuBar();
         }
-
-        GenerateTextMetroRepresentation(metro);
 
         SDL_Event sdl_event;
         while (SDL_PollEvent(&sdl_event) != 0) {
             switch (sdl_event.type) {
                 case SDL_QUIT: {
-                    result = {};
+                    action = Action::Quit;
                     break;
                 }
             }
         }
-        ImGuiIO& io = ImGui::GetIO();
-        ImGui::Render();
-        glViewport(0, 0, static_cast<int>(io.DisplaySize.x), static_cast<int>(io.DisplaySize.y));
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-        return result;
+        return action;
     }
 
-    void SDL::Draw(const metro_simulation::Config& config, const metro_simulation::Metro& metro) {
+    void SDL::Draw(const metro_simulation::Config& config, const metro_simulation::Metro& metro) const {
+        graphics::GenerateTextMetroRepresentation(metro);
         static Texture station("textures/station.bmp");
 
         DrawRectangle(
-            {-1.f, 1.f},
-            {1.f, -1.f},
+            {-0.05f, 0.05f},
+            {0.05f, -0.05f},
             station,
             {0.f, 0.f},
             {1.f, 1.f}

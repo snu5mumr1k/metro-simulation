@@ -4,19 +4,20 @@ include_directories(${OPENGL_INCLUDE_DIR})
 find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIR})
 
-add_library(lib-graphics-adapter
-    sdl_adapter.cpp
+add_library(lib-graphics-interface
+    metro_representation.cpp
+    config_editor.cpp
+    metro_editor.cpp
 )
 
-target_link_libraries(lib-graphics-adapter
+target_link_libraries(lib-graphics-interface
     ${SDL2_LIBRARY}
     external-gl
     lib-graphics-primitives
-    lib-graphics-interface
     proto
 )
 
-target_include_directories(lib-graphics-adapter
+target_include_directories(lib-graphics-interface
     PUBLIC ${CMAKE_SOURCE_DIR}
     PRIVATE ${CMAKE_BINARY_DIR}
     PRIVATE ${PROTOBUF_LIBRARY}

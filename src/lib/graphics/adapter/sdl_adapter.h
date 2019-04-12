@@ -2,7 +2,6 @@
 
 #include <external/gl/gl_core_3_3.h>
 
-#include <optional>
 #include <string>
 
 #include <SDL.h>
@@ -10,22 +9,30 @@
 
 #include <external/imgui/imgui.h>
 
-namespace metro_simulation {
-class Metro;
-class Config;
-}  // namespace metro_simulation
+#include <proto/config.pb.h>
+#include <proto/metro.pb.h>
 
 namespace graphics {
 class SDL {
 public:
+    enum class Action {
+        Quit,
+        ResetToDefaults,
+        ResetToBeginning,
+        Idle
+    };
+
     SDL();
     ~SDL();
 
-    std::optional<metro_simulation::Config> DrawInterface(const metro_simulation::Config& config, const metro_simulation::Metro &metro);
-    void Draw(const metro_simulation::Config& config, const metro_simulation::Metro& metro);
+    metro_simulation::Config EditConfig(const metro_simulation::Config& config) const;
+    metro_simulation::Metro EditMetro(const metro_simulation::Metro& metro) const;
 
-    void ClearBuffer();
-    void SwapBuffers();
+    Action DrawInterface() const;
+    void Draw(const metro_simulation::Config& config, const metro_simulation::Metro& metro) const ;
+
+    void InitFrame();
+    void FinishFrame();
 
 private:
     int width_;

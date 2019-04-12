@@ -27,44 +27,47 @@ TProto Load(const std::string& filename) {
 }
 
 int main() {
-    using namespace std::chrono_literals;
-
     graphics::SDL *sdl = Singleton<graphics::SDL>();
 
     bool quit = false;
-
-    std::optional<metro_simulation::Config> config = Load<metro_simulation::Config>("../config.json");
-    const auto metro = Load<metro_simulation::Metro>("../metro.json");
+    metro_simulation::Config config = Load<metro_simulation::Config>("../config.json");
+    auto metro = Load<metro_simulation::Metro>("../metro.json");
     core::Simulator simulator(metro);
-    while (true) {
-        sdl->ClearBuffer();
-        sdl->Draw(*config, simulator.metro());
-        auto new_config = sdl->DrawInterface(*config, simulator.metro());
-        sdl->SwapBuffers();
+    while (!quit) {
+        sdl->InitFrame();
+        sdl->Draw(config, simulator.metro());
+        config = sdl->EditConfig(config);
+        metro = sdl->EditMetro(metro);
+        const auto action = sdl->DrawInterface();
+        sdl->FinishFrame();
 
-        if (!new_config) {
-            break;
+        switch (action) {
+            case graphics::SDL::Action::ResetToBeginning: {
+                simulator.Reset(metro);
+                break;
+            }
+            case graphics::SDL::Action::ResetToDefaults: {
+                simulator.Reset();
+                break;
+            }
+            case graphics::SDL::Action::Quit: {
+                quit = true;
+                break;
+            }
+            case graphics::SDL::Action::Idle: {
+                break;
+            }
         }
 
-        for (int i = 0; i < config->ticks_per_frame(); ++i) {
-            simulator.Tick(*config);
-            const int64_t new_timestamp = config->current_simulation_timestamp() + config->tick_simulation_seconds();
-            config->set_current_simulation_timestamp(new_timestamp);
+        for (int i = 0; i < config.ticks_per_frame(); ++i) {
+            simulator.Tick(config);
+            const int64_t new_timestamp = config.current_simulation_timestamp() + config.tick_simulation_seconds();
+            config.set_current_simulation_timestamp(new_timestamp);
         }
 
-        config.swap(new_config);
-
-        if (config->reset_to_beginning()) {
-            simulator.Reset(metro);
-            config->set_reset_to_beginning(false);
-        } else if (config->reset_to_defaults()) {
-            simulator.Reset();
-            config->set_reset_to_defaults(false);
-        }
-
-        const auto sleep_time = std::chrono::milliseconds(static_cast<int64_t>(1.0 / config->frames_per_second()));
+        const auto sleep_time = std::chrono::milliseconds(static_cast<int64_t>(1.0 / config.frames_per_second()));
         std::this_thread::sleep_for(sleep_time);
     }
     Dump(simulator.metro(), "../metro.json");
-    Dump(*config, "../config.json");
+    Dump(config, "../config.json");
 }
