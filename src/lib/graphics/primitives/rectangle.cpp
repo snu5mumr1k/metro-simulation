@@ -7,10 +7,16 @@
 #include "rectangle.h"
 
 
-void DrawRectangle(const std::array<float, 2> &top_left, const std::array<float, 2> &bottom_right, const std::array<float, 2> &texture_top_left, const std::array<float, 2> &texture_bottom_right) {
+void DrawRectangle(
+        const std::array<float, 2> &top_left,
+        const std::array<float, 2> &bottom_right,
+        const Texture &texture,
+        const std::array<float, 2> &texture_top_left,
+        const std::array<float, 2> &texture_bottom_right) {
     static Shader shader("shaders/rectangle.vert", "shaders/rectangle.frag");
     shader.Activate();
     shader.SetUniform("textureSampler", 0);
+    texture.Activate();
 
     float coordinates[8] = {
         top_left[0],

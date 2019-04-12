@@ -38,8 +38,8 @@ int main() {
     core::Simulator simulator(metro);
     while (true) {
         sdl->ClearBuffer();
-        auto new_config = sdl->DrawInterface(*config, simulator.metro());
         sdl->Draw(*config, simulator.metro());
+        auto new_config = sdl->DrawInterface(*config, simulator.metro());
         sdl->SwapBuffers();
 
         if (!new_config) {

@@ -1,7 +1,6 @@
 // XXX: Has to be included first
 #include "sdl_adapter.h"
 
-
 #include <optional>
 #include <stdexcept>
 #include <string>
@@ -11,6 +10,8 @@
 
 #include <proto/config.pb.h>
 #include <proto/metro.pb.h>
+
+#include <lib/graphics/primitives/rectangle.h>
 
 namespace {
 void GenerateTextMetroRepresentation(const metro_simulation::Metro &metro) {
@@ -194,5 +195,14 @@ namespace graphics {
     }
 
     void SDL::Draw(const metro_simulation::Config& config, const metro_simulation::Metro& metro) {
+        static Texture station("textures/station.bmp");
+
+        DrawRectangle(
+            {-1.f, 1.f},
+            {1.f, -1.f},
+            station,
+            {0.f, 0.f},
+            {1.f, 1.f}
+        );
     }
 }  // namespace graphics

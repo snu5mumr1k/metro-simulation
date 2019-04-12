@@ -8,13 +8,10 @@ add_library(lib-graphics-primitives
 target_link_libraries(lib-graphics-primitives
     external-gl
     lib-graphics-shader
+    lib-graphics-texture
 )
 
 target_include_directories(lib-graphics-primitives
     PUBLIC ${CMAKE_SOURCE_DIR}
     PRIVATE ${CMAKE_BINARY_DIR}
-)
-
-add_dependencies(lib-graphics-primitives
-    shaders
 )

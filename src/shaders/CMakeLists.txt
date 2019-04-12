@@ -1,3 +1,2 @@
-add_custom_target(shaders
-    SOURCES rectangle.frag rectangle.vert
-)
+configure_file(rectangle.frag rectangle.frag)
+configure_file(rectangle.vert rectangle.vert)
