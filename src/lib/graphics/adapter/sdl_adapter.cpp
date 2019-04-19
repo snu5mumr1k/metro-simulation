@@ -118,7 +118,7 @@ namespace graphics {
             if (ImGui::MenuItem("Reset to defaults")) {
                 action = Action::ResetToDefaults;
             }
-            if (ImGui::MenuItem("Reset to beginning")) {
+            if (ImGui::MenuItem("Save metro")) {
                 action = Action::ResetToBeginning;
             }
             ImGui::EndMainMenuBar();

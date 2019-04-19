@@ -14,6 +14,7 @@ target_link_libraries(lib-graphics-interface
     ${SDL2_LIBRARY}
     external-gl
     lib-graphics-primitives
+    lib-util-idgenerator
     proto
 )
 

@@ -1,1 +1,2 @@
+add_subdirectory(id_generator)
 add_subdirectory(singleton)

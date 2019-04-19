@@ -10,8 +10,9 @@
 #include <lib/graphics/adapter/sdl_adapter.h>
 #include <lib/simulator/simulator.h>
 #include <lib/util/singleton/singleton.h>
+#include <lib/util/id_generator/id_generator.h>
 
-
+namespace {
 template<class TProto>
 void Dump(const TProto& proto, const std::string& filename) {
     std::ofstream out(filename);
@@ -26,12 +27,26 @@ TProto Load(const std::string& filename) {
     return proto;
 }
 
+void InitGenerators(const proto::Metro &metro) {
+    util::Singleton<util::IdGenerator<proto::Line>>()->ResetStorage(metro.lines().begin(), metro.lines().end());
+    for (const auto &line : metro.lines()) {
+        util::Singleton<util::IdGenerator<proto::Station>>()->AddMany(line.stations().begin(), line.stations().end());
+        util::Singleton<util::IdGenerator<proto::Section>>()->AddMany(line.sections().begin(), line.sections().end());
+        for (const auto &station : line.stations()) {
+            util::Singleton<util::IdGenerator<proto::Platform>>()->AddMany(station.platforms().begin(), station.platforms().end());
+        }
+        util::Singleton<util::IdGenerator<proto::Train>>()->AddMany(line.trains().begin(), line.trains().end());
+    }
+}
+}  // namespace
+
 int main() {
-    graphics::SDL *sdl = Singleton<graphics::SDL>();
+    graphics::SDL *sdl = util::Singleton<graphics::SDL>();
 
     bool quit = false;
     proto::Config config = Load<proto::Config>("../config.json");
     auto metro = Load<proto::Metro>("../metro.json");
+    InitGenerators(metro);
     core::Simulator simulator(metro);
     while (!quit) {
         sdl->InitFrame();
