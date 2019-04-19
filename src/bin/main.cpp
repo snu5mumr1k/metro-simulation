@@ -47,7 +47,7 @@ int main() {
                 break;
             }
             case graphics::SDL::Action::ResetToDefaults: {
-                simulator.Reset();
+                simulator.Reset(config);
                 break;
             }
             case graphics::SDL::Action::Quit: {

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <proto/config.pb.h>
+#include <proto/metro.pb.h>
 
 #include "metro.h"
 
@@ -9,7 +10,7 @@ class Simulator {
  public:
     explicit Simulator(metro_simulation::Metro metro_data);
 
-    void Reset();
+    void Reset(const metro_simulation::Config &config);
     void Reset(metro_simulation::Metro metro_data);
     void Tick(const metro_simulation::Config &config);
 

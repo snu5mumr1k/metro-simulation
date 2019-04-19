@@ -5,7 +5,7 @@
 #include "simulator.h"
 
 namespace {
-metro_simulation::Metro GenerateMetro() {
+metro_simulation::Metro GenerateMetro(const metro_simulation::Config &config) {
     metro_simulation::Metro result;
 
     result.add_lines();
@@ -40,7 +40,7 @@ metro_simulation::Metro GenerateMetro() {
     train->set_meters_per_second(18);
     train->set_state(metro_simulation::Train::PLATFORM);
     train->set_platform_id(section->origin_platform_id());
-    train->set_arrived_at(std::time(nullptr));
+    train->set_arrived_at(config.current_simulation_timestamp());
 
     auto path = train->mutable_path();
     auto next_step = path->mutable_next_step();
@@ -60,8 +60,8 @@ const metro_simulation::Metro &Simulator::metro() const {
     return metro_.metro();
 }
 
-void Simulator::Reset() {
-    metro_data_ = GenerateMetro();
+void Simulator::Reset(const metro_simulation::Config &config) {
+    metro_data_ = GenerateMetro(config);
     metro_ = Metro(&metro_data_);
 }
 
