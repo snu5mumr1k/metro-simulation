@@ -35,10 +35,10 @@ int main() {
     core::Simulator simulator(metro);
     while (!quit) {
         sdl->InitFrame();
+        const auto action = sdl->DrawInterface();
         sdl->Draw(config, simulator.metro());
         config = sdl->EditConfig(config);
         metro = sdl->EditMetro(metro);
-        const auto action = sdl->DrawInterface();
         sdl->FinishFrame();
 
         switch (action) {

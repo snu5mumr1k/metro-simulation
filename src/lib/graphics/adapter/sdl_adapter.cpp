@@ -126,6 +126,7 @@ namespace graphics {
 
         SDL_Event sdl_event;
         while (SDL_PollEvent(&sdl_event) != 0) {
+            ImGui_ImplSDL2_ProcessEvent(&sdl_event);
             switch (sdl_event.type) {
                 case SDL_QUIT: {
                     action = Action::Quit;

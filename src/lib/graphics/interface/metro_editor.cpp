@@ -67,10 +67,19 @@ metro_simulation::Metro EditMetro(metro_simulation::Metro metro) {
                     }
                     ImGui::SameLine();
                     ImGui::Text("Section %lld", section.id());
+                    ImGui::SameLine();
+                    ImGui::Text("From %lld to %lld", section.origin_platform_id(), section.destination_platform_id());
                 }
+                static int64_t origin_platform_id = 0;
+                static int64_t destination_platform_id = 0;
+                ImGui::InputScalar("From##section", ImGuiDataType_S64, &origin_platform_id);
+                ImGui::SameLine();
+                ImGui::InputScalar("To##section", ImGuiDataType_S64, &destination_platform_id);
                 if (ImGui::Button("+##section")) {
                     auto new_section = metro.mutable_lines(i)->add_sections();
                     new_section->set_id(max_section_id + 1);
+                    new_section->set_origin_platform_id(origin_platform_id);
+                    new_section->set_destination_platform_id(destination_platform_id);
                 }
             }
             ImGui::Unindent();
