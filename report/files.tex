@@ -1,0 +1,31 @@
+\section{Описание файловой структуры системы}
+
+Основные файлы модели
+
+В каждом из следующих заголовочных файлов вида train.h определён соответствующий класс Train.
+В соответствующем же ему train.cpp находится реализация его методов
+\begin{itemize}
+    \item lib/simulator/train.\{h,cpp\}
+    \item lib/simulator/path.\{h,cpp\}
+    \item lib/simulator/section.\{h,cpp\}
+    \item lib/simulator/station.\{h,cpp\}
+    \item lib/simulator/simulator.\{h,cpp\}
+    \item lib/simulator/line.\{h,cpp\}
+    \item lib/simulator/platform.\{h,cpp\}
+    \item lib/simulator/metro.\{h,cpp\}
+\end{itemize}
+
+Прочие файлы
+\begin{itemize}
+    \item lib/graphics/adapter/sdl\_adapter.\{h,cpp\} --- класс SDL. Графический адаптер, отвечающий за отрисовку окна, картинки метро и элементов интерфейса
+    \item lib/graphics/interface/config\_editor.\{h,cpp\} --- реализация интерфейса редактирования конфига
+    \item lib/graphics/interface/metro\_editor.\{h,cpp\} --- реализация интерфейса редактирования структуры метро
+    \item lib/graphics/interface/metro\_representation.\{h,cpp\} --- реализация текстового представления метро
+    \item lib/graphics/primitives/rectangle.\{h,cpp\} --- реализация отрисовки прямоугольника с текстурой
+    \item lib/graphics/shader/shader.\{h,cpp\} --- класс Shader. Обёртка над шейдером OpenGL
+    \item lib/graphics/texture/texture.\{h,cpp\} --- класс Texture. Обёртка над текстурой OpenGL
+
+    \item lib/util/singleton/singleton.\{h,cpp\} --- функция Singleton, реализующая одноимённый паттерн
+
+    \item bin/main.cpp --- главный цикл программы, синхронизирующий графический и симуляционный модули
+\end{itemize}
