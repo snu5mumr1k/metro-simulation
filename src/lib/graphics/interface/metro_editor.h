@@ -3,5 +3,5 @@
 #include <proto/metro.pb.h>
 
 namespace graphics {
-metro_simulation::Metro EditMetro(metro_simulation::Metro metro);
+proto::Metro EditMetro(proto::Metro metro);
 }  // namespace graphics

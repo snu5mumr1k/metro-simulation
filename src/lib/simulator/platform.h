@@ -5,11 +5,11 @@
 namespace core {
 class Platform {
  public:
-    explicit Platform(metro_simulation::Platform *platform);
+    explicit Platform(proto::Platform *platform);
 
     void Tick();
 
  private:
-    metro_simulation::Platform *platform_;
+    proto::Platform *platform_;
 };
 }  // namespace core

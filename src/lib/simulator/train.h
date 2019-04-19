@@ -12,12 +12,12 @@
 namespace core {
 class Train {
  public:
-    Train(metro_simulation::Train *train, const std::unordered_map<int64_t, Section> &sections);
+    Train(proto::Train *train, const std::unordered_map<int64_t, Section> &sections);
 
-    void Tick(const metro_simulation::Config &config);
+    void Tick(const proto::Config &config);
 
  private:
-    metro_simulation::Train *train_;
+    proto::Train *train_;
     Path path_;
     std::optional<const Section> current_section_;
 };

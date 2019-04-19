@@ -6,17 +6,17 @@
 #include "metro_representation.h"
 
 namespace graphics {
-void GenerateTextMetroRepresentation(const metro_simulation::Metro &metro) {
-    std::unordered_map<int64_t, std::vector<const metro_simulation::Train *>> sectionsTrains;
-    std::unordered_map<int64_t, std::vector<const metro_simulation::Train *>> platformsTrains;
+void GenerateTextMetroRepresentation(const proto::Metro &metro) {
+    std::unordered_map<int64_t, std::vector<const proto::Train *>> sectionsTrains;
+    std::unordered_map<int64_t, std::vector<const proto::Train *>> platformsTrains;
     for (const auto &line : metro.lines()) {
         for (const auto &train : line.trains()) {
             switch (train.state()) {
-                case metro_simulation::Train::SECTION: {
+                case proto::Train::SECTION: {
                     sectionsTrains[train.section_id()].push_back(&train);
                     break;
                 }
-                case metro_simulation::Train::PLATFORM: {
+                case proto::Train::PLATFORM: {
                     platformsTrains[train.section_id()].push_back(&train);
                     break;
                 }
@@ -45,7 +45,7 @@ void GenerateTextMetroRepresentation(const metro_simulation::Metro &metro) {
             }
         }
         for (const auto &train : line.trains()) {
-            if (train.state() == metro_simulation::Train::IDLE) {
+            if (train.state() == proto::Train::IDLE) {
                 ImGui::Text("Train %lld is idle at %lld", train.id(), train.platform_id());
             }
         }

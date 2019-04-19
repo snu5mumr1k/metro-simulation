@@ -8,16 +8,16 @@
 namespace core {
 class Simulator {
  public:
-    explicit Simulator(metro_simulation::Metro metro_data);
+    explicit Simulator(proto::Metro metro_data);
 
-    void Reset(const metro_simulation::Config &config);
-    void Reset(metro_simulation::Metro metro_data);
-    void Tick(const metro_simulation::Config &config);
+    void Reset(const proto::Config &config);
+    void Reset(proto::Metro metro_data);
+    void Tick(const proto::Config &config);
 
-    const metro_simulation::Metro &metro() const;
+    const proto::Metro &metro() const;
 
  private:
-    metro_simulation::Metro metro_data_;
+    proto::Metro metro_data_;
     Metro metro_;
 };
 }  // namespace core

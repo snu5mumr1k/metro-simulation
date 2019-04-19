@@ -101,11 +101,11 @@ namespace graphics {
         SDL_GL_SwapWindow(window_);
     }
 
-    metro_simulation::Config SDL::EditConfig(const metro_simulation::Config &config) const {
+    proto::Config SDL::EditConfig(const proto::Config &config) const {
         return graphics::EditConfig(config);
     }
 
-    metro_simulation::Metro SDL::EditMetro(const metro_simulation::Metro &metro) const {
+    proto::Metro SDL::EditMetro(const proto::Metro &metro) const {
         return graphics::EditMetro(metro);
     }
 
@@ -137,7 +137,7 @@ namespace graphics {
         return action;
     }
 
-    void SDL::Draw(const metro_simulation::Config &config, const metro_simulation::Metro &metro) const {
+    void SDL::Draw(const proto::Config &config, const proto::Metro &metro) const {
         graphics::GenerateTextMetroRepresentation(metro);
         static Texture station("textures/station.bmp");
 

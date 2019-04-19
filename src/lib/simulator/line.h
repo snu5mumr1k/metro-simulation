@@ -13,12 +13,12 @@
 namespace core {
 class Line {
  public:
-    explicit Line(metro_simulation::Line *line);
+    explicit Line(proto::Line *line);
 
-    void Tick(const metro_simulation::Config &config);
+    void Tick(const proto::Config &config);
 
  private:
-    metro_simulation::Line *line_;
+    proto::Line *line_;
 
     std::unordered_map<int64_t, Section> sections_;
     std::unordered_map<int64_t, Station> stations_;

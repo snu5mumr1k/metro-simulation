@@ -10,14 +10,14 @@
 namespace core {
 class Metro {
  public:
-    explicit Metro(metro_simulation::Metro *metro);
+    explicit Metro(proto::Metro *metro);
 
-    void Tick(const metro_simulation::Config &config);
+    void Tick(const proto::Config &config);
 
-    const metro_simulation::Metro &metro() const;
+    const proto::Metro &metro() const;
 
  private:
-    metro_simulation::Metro *metro_;
+    proto::Metro *metro_;
 
     std::vector<Line> lines_;
 };

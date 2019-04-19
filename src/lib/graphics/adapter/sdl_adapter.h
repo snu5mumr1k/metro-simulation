@@ -24,11 +24,11 @@ class SDL {
     SDL();
     ~SDL();
 
-    metro_simulation::Config EditConfig(const metro_simulation::Config &config) const;
-    metro_simulation::Metro EditMetro(const metro_simulation::Metro &metro) const;
+    proto::Config EditConfig(const proto::Config &config) const;
+    proto::Metro EditMetro(const proto::Metro &metro) const;
 
     Action DrawInterface() const;
-    void Draw(const metro_simulation::Config &config, const metro_simulation::Metro &metro) const;
+    void Draw(const proto::Config &config, const proto::Metro &metro) const;
 
     void InitFrame();
     void FinishFrame();

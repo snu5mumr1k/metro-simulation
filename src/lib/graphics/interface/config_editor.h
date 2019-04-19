@@ -4,5 +4,5 @@
 #include <proto/config.pb.h>
 
 namespace graphics {
-metro_simulation::Config EditConfig(metro_simulation::Config result);
+proto::Config EditConfig(proto::Config result);
 }  // namespace graphics

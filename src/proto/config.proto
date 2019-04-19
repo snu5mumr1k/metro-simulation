@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package metro_simulation;
+package proto;
 
 message Config {
     int32 frames_per_second = 3;

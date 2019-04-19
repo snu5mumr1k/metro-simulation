@@ -1,7 +1,7 @@
 #include "station.h"
 
 namespace core {
-Station::Station(metro_simulation::Station *station) : station_(station) {
+Station::Station(proto::Station *station) : station_(station) {
 }
 
 void Station::Tick() {

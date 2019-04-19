@@ -1,7 +1,7 @@
 #include "path.h"
 
 namespace core {
-Path::Path(const metro_simulation::Path &path, const std::unordered_map<int64_t, Section> &sections)
+Path::Path(const proto::Path &path, const std::unordered_map<int64_t, Section> &sections)
     : path_(path),
       sections_(sections) {
 }

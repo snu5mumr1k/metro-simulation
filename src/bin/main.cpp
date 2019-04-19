@@ -30,8 +30,8 @@ int main() {
     graphics::SDL *sdl = Singleton<graphics::SDL>();
 
     bool quit = false;
-    metro_simulation::Config config = Load<metro_simulation::Config>("../config.json");
-    auto metro = Load<metro_simulation::Metro>("../metro.json");
+    proto::Config config = Load<proto::Config>("../config.json");
+    auto metro = Load<proto::Metro>("../metro.json");
     core::Simulator simulator(metro);
     while (!quit) {
         sdl->InitFrame();

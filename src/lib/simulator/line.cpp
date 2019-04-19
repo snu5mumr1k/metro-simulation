@@ -1,7 +1,7 @@
 #include "line.h"
 
 namespace core {
-Line::Line(metro_simulation::Line *line) : line_(line) {
+Line::Line(proto::Line *line) : line_(line) {
     for (auto &station : *line->mutable_stations()) {
         stations_.emplace(station.id(), Station(&station));
         for (auto &platform : *station.mutable_platforms()) {
@@ -18,7 +18,7 @@ Line::Line(metro_simulation::Line *line) : line_(line) {
     }
 }
 
-void Line::Tick(const metro_simulation::Config &config) {
+void Line::Tick(const proto::Config &config) {
     for (auto &[_, train] : trains_) {
         train.Tick(config);
     }

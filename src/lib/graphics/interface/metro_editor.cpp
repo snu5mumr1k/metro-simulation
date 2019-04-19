@@ -5,7 +5,7 @@
 #include <external/imgui/imgui.h>
 
 namespace graphics {
-metro_simulation::Metro EditMetro(metro_simulation::Metro metro) {
+proto::Metro EditMetro(proto::Metro metro) {
     ImGui::Begin("Edit Metro");
 
     ImGui::Text("Lines");

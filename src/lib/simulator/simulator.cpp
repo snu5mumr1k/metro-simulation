@@ -5,8 +5,8 @@
 #include "simulator.h"
 
 namespace {
-metro_simulation::Metro GenerateMetro(const metro_simulation::Config &config) {
-    metro_simulation::Metro result;
+proto::Metro GenerateMetro(const proto::Config &config) {
+    proto::Metro result;
 
     result.add_lines();
     auto line = result.mutable_lines(0);
@@ -38,7 +38,7 @@ metro_simulation::Metro GenerateMetro(const metro_simulation::Config &config) {
     auto train = line->mutable_trains(0);
     train->set_id(0);
     train->set_meters_per_second(18);
-    train->set_state(metro_simulation::Train::PLATFORM);
+    train->set_state(proto::Train::PLATFORM);
     train->set_platform_id(section->origin_platform_id());
     train->set_arrived_at(config.current_simulation_timestamp());
 
@@ -51,26 +51,26 @@ metro_simulation::Metro GenerateMetro(const metro_simulation::Config &config) {
 }  // namespace
 
 namespace core {
-Simulator::Simulator(metro_simulation::Metro metro_data)
+Simulator::Simulator(proto::Metro metro_data)
     : metro_data_(metro_data),
       metro_(&metro_data_)
 {}
 
-const metro_simulation::Metro &Simulator::metro() const {
+const proto::Metro &Simulator::metro() const {
     return metro_.metro();
 }
 
-void Simulator::Reset(const metro_simulation::Config &config) {
+void Simulator::Reset(const proto::Config &config) {
     metro_data_ = GenerateMetro(config);
     metro_ = Metro(&metro_data_);
 }
 
-void Simulator::Reset(metro_simulation::Metro metro_data) {
+void Simulator::Reset(proto::Metro metro_data) {
     metro_data_ = metro_data;
     metro_ = Metro(&metro_data_);
 }
 
-void Simulator::Tick(const metro_simulation::Config &config) {
+void Simulator::Tick(const proto::Config &config) {
     metro_.Tick(config);
 }
 }  // namespace core

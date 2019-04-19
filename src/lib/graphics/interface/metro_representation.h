@@ -3,5 +3,5 @@
 #include <proto/metro.pb.h>
 
 namespace graphics {
-void GenerateTextMetroRepresentation(const metro_simulation::Metro &metro);
+void GenerateTextMetroRepresentation(const proto::Metro &metro);
 }  // namespace graphics

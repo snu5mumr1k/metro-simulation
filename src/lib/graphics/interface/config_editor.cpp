@@ -3,7 +3,7 @@
 #include <external/imgui/imgui.h>
 
 namespace graphics {
-metro_simulation::Config EditConfig(metro_simulation::Config result) {
+proto::Config EditConfig(proto::Config result) {
     ImGui::Begin("Configuration");
 
     int32_t frames_per_second = result.frames_per_second();
