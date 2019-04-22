@@ -2,7 +2,7 @@
 
 namespace {
     constexpr int64_t SLEEP_TIME = 30;
-}
+}  // namespace
 
 namespace core {
 Train::Train(proto::Train *train, const std::unordered_map<int64_t, Section> &sections)

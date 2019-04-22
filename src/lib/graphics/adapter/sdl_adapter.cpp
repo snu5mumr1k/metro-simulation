@@ -141,11 +141,13 @@ namespace graphics {
         graphics::GenerateTextMetroRepresentation(metro);
         static Texture station("textures/station.bmp");
 
+        /*
         DrawRectangle(
             {-0.05f, 0.05f},
             {0.05f, -0.05f},
             station,
             {0.f, 0.f},
             {1.f, 1.f});
+        */
     }
 }  // namespace graphics

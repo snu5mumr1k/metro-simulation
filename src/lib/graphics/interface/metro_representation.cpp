@@ -1,5 +1,6 @@
 #include <external/imgui/imgui.h>
 
+#include <map>
 #include <unordered_map>
 #include <vector>
 
@@ -7,17 +8,17 @@
 
 namespace graphics {
 void GenerateTextMetroRepresentation(const proto::Metro &metro) {
-    std::unordered_map<int64_t, std::vector<const proto::Train *>> sectionsTrains;
-    std::unordered_map<int64_t, std::vector<const proto::Train *>> platformsTrains;
+    std::unordered_map<int64_t, std::vector<const proto::Train *>> sections_trains;
+    std::unordered_map<int64_t, std::vector<const proto::Train *>> platform_trains;
     for (const auto &line : metro.lines()) {
         for (const auto &train : line.trains()) {
             switch (train.state()) {
                 case proto::Train::SECTION: {
-                    sectionsTrains[train.section_id()].push_back(&train);
+                    sections_trains[train.section_id()].push_back(&train);
                     break;
                 }
                 case proto::Train::PLATFORM: {
-                    platformsTrains[train.section_id()].push_back(&train);
+                    platform_trains[train.section_id()].push_back(&train);
                     break;
                 }
                 default:
@@ -30,21 +31,24 @@ void GenerateTextMetroRepresentation(const proto::Metro &metro) {
     for (const auto &line : metro.lines()) {
         ImGui::Text("Line %lld", line.id());
         for (const auto &section : line.sections()) {
-            ImGui::Text("Section %lld", section.id());
-            for (const auto *train : sectionsTrains[section.id()]) {
-                ImGui::Text(
-                    "Train %lld completed %lld/%lld", train->id(), train->section_completed_meters(), section.length());
+            std::string description = "%lld " + std::string(40, '.') + " %lld";
+            for (const auto *train : sections_trains[section.id()]) {
+                description[(train->section_completed_meters() * description.size() / section.length()) % description.size()] = '=';
             }
+            ImGui::Text(description.c_str(), section.origin_platform_id(), section.destination_platform_id());
         }
         for (const auto &station : line.stations()) {
-            ImGui::Text("Station %lld", station.id());
             for (const auto &platform : station.platforms()) {
-                for (const auto *train : platformsTrains[platform.id()]) {
+                for (const auto *train : platform_trains[platform.id()]) {
                     ImGui::Text("Train %lld is at the platform %lld", train->id(), platform.id());
                 }
             }
         }
         for (const auto &train : line.trains()) {
+            std::map<int64_t, int64_t> ordered_path;
+            for (const auto &p : train.path().next_step()) {
+                ordered_path[p.first] = p.second;
+            }
             if (train.state() == proto::Train::IDLE) {
                 ImGui::Text("Train %lld is idle at %lld", train.id(), train.platform_id());
             }
