@@ -7,6 +7,7 @@
 #include <unordered_map>
 #include <vector>
 
+#include <iostream>
 namespace graphics {
 void GenerateTextMetroRepresentation(const proto::Metro &metro) {
   std::unordered_map<int64_t, std::vector<const proto::Train *>> sections_trains;
@@ -32,12 +33,13 @@ void GenerateTextMetroRepresentation(const proto::Metro &metro) {
   for (const auto &line : metro.lines()) {
     ImGui::Text("Line %lld", line.id());
     for (const auto &section : line.sections()) {
-      std::string description = "%lld " + std::string(40, '.') + " %lld";
+      std::string description = std::string(40, '.');
       for (const auto *train : sections_trains[section.id()]) {
         const auto length = description.size();
-        const auto completed_part = train->section_completed_meters() * length / section.length();
+        const int completed_part = train->section_completed_meters() * length / (section.length() + 1);
         description[completed_part % length] = '=';
       }
+      description = "%lld " + description + " %lld";
       ImGui::Text(description.c_str(), section.origin_platform_id(), section.destination_platform_id());
     }
     for (const auto &station : line.stations()) {

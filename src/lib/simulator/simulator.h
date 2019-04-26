@@ -8,7 +8,7 @@
 namespace core {
 class Simulator {
  public:
-  explicit Simulator(proto::Metro metro_data);
+  explicit Simulator(proto::Metro *metro_data);
 
   void Reset(const proto::Config &config);
   void Reset(proto::Metro metro_data);

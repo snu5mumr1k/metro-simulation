@@ -105,8 +105,8 @@ namespace graphics {
   return graphics::EditConfig(config);
   }
 
-  proto::Metro SDL::EditMetro(const proto::Metro &metro) const {
-  return graphics::EditMetro(metro);
+  void SDL::EditMetro(proto::Metro *metro) const {
+    graphics::EditMetro(metro);
   }
 
   SDL::Action SDL::DrawInterface() const {
@@ -138,8 +138,14 @@ namespace graphics {
   }
 
   void SDL::Draw(const proto::Config &config, const proto::Metro &metro) const {
-  graphics::GenerateTextMetroRepresentation(metro);
-  static Texture station("textures/station.bmp");
+    graphics::GenerateTextMetroRepresentation(metro);
+    static Texture station("textures/station.bmp");
+    ImGui::Begin("Timers");
+    ImGui::Text("Current timestamp: %f", config.current_simulation_timestamp());
+    ImGui::Text("Simulation seconds per tick: %f", config.seconds_per_tick());
+    ImGui::Text("Frames per second: %d", config.frames_per_second());
+    ImGui::Text("Simulation seconds per real second: %f", config.frames_per_second() * config.ticks_per_frame() * config.seconds_per_tick());
+    ImGui::End();
 
   /*
   DrawRectangle(

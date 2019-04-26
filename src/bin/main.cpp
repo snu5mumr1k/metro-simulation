@@ -47,13 +47,13 @@ int main() {
     proto::Config config = Load<proto::Config>("../config.json");
     auto metro = Load<proto::Metro>("../metro.json");
     InitGenerators(metro);
-    core::Simulator simulator(metro);
+    core::Simulator simulator(&metro);
     while (!quit) {
         sdl->InitFrame();
         const auto action = sdl->DrawInterface();
         sdl->Draw(config, simulator.metro());
         config = sdl->EditConfig(config);
-        metro = sdl->EditMetro(metro);
+        sdl->EditMetro(&metro);
         sdl->FinishFrame();
 
         switch (action) {
@@ -73,14 +73,13 @@ int main() {
                 break;
             }
         }
-
         for (int i = 0; i < config.ticks_per_frame(); ++i) {
             simulator.Tick(config);
-            const int64_t new_timestamp = config.current_simulation_timestamp() + config.tick_simulation_seconds();
+            const double new_timestamp = config.current_simulation_timestamp() + config.seconds_per_tick();
             config.set_current_simulation_timestamp(new_timestamp);
         }
 
-        const auto sleep_time = std::chrono::milliseconds(static_cast<int64_t>(1.0 / config.frames_per_second()));
+        const auto sleep_time = std::chrono::milliseconds(1000 / config.frames_per_second());
         std::this_thread::sleep_for(sleep_time);
     }
     Dump(simulator.metro(), "../metro.json");

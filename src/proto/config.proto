@@ -6,8 +6,8 @@ message Config {
     int32 frames_per_second = 3;
     int32 ticks_per_frame = 4;
 
-    int64 current_simulation_timestamp = 5;
-    int64 tick_simulation_seconds = 6;
+    double current_simulation_timestamp = 5;
+    double seconds_per_tick = 7;
 }
 
 message MetroConfig {

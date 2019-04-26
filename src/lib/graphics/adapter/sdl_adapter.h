@@ -25,7 +25,7 @@ class SDL {
   ~SDL();
 
   proto::Config EditConfig(const proto::Config &config) const;
-  proto::Metro EditMetro(const proto::Metro &metro) const;
+  void EditMetro(proto::Metro *metro) const;
 
   Action DrawInterface() const;
   void Draw(const proto::Config &config, const proto::Metro &metro) const;

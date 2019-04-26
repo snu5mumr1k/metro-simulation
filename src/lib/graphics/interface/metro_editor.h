@@ -3,5 +3,5 @@
 #include <proto/metro.pb.h>
 
 namespace graphics {
-proto::Metro EditMetro(proto::Metro metro);
+void EditMetro(proto::Metro *metro);
 }  // namespace graphics

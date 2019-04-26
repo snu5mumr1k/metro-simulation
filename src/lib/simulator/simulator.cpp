@@ -49,9 +49,9 @@ proto::Metro GenerateMetro(const proto::Config &config) {
 }  // namespace
 
 namespace core {
-Simulator::Simulator(proto::Metro metro_data)
-  : metro_data_(metro_data),
-  metro_(&metro_data_)
+Simulator::Simulator(proto::Metro *metro_data)
+  : metro_data_(*metro_data),
+    metro_(metro_data)
 {}
 
 const proto::Metro &Simulator::metro() const {
