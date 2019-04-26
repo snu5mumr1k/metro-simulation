@@ -13,6 +13,7 @@ class Path {
   Path(const proto::Path &path, const std::unordered_map<int64_t, Section> &sections);
 
   std::optional<const Section> FindNextSection(int64_t platform_id) const;
+  Section FirstSection() const;
 
  private:
   const proto::Path &path_;

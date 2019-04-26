@@ -35,7 +35,7 @@ void Train::Tick(const proto::Config &config) {
     }
     case proto::Train::SECTION: {
       const int64_t completed =
-      train_->section_completed_meters() + train_->meters_per_second() * config.tick_simulation_seconds();
+        train_->section_completed_meters() + train_->meters_per_second() * config.tick_simulation_seconds();
       const int64_t section_length = current_section_->section().length();
       if (completed >= section_length) {
         train_->set_state(proto::Train::PLATFORM);
@@ -43,6 +43,14 @@ void Train::Tick(const proto::Config &config) {
       }
       train_->set_section_completed_meters(completed);
       break;
+    }
+    case proto::Train::IDLE: {
+      current_section_.emplace(path_.FirstSection());
+      const auto section = current_section_->section();
+      train_->set_platform_id(section.destination_platform_id());
+      train_->set_section_completed_meters(0);
+      train_->set_section_id(section.id());
+      train_->set_state(proto::Train::SECTION);
     }
     default: {
       break;
