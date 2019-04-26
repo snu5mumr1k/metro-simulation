@@ -6,11 +6,11 @@
 
 class Texture {
  public:
-    explicit Texture(const std::string &filename);
-    ~Texture();
+  explicit Texture(const std::string &filename);
+  ~Texture();
 
-    void Activate() const;
+  void Activate() const;
 
  private:
-    GLuint gl_id_;
+  GLuint gl_id_;
 };

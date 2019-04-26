@@ -5,11 +5,11 @@
 namespace core {
 class Platform {
  public:
-    explicit Platform(proto::Platform *platform);
+  explicit Platform(proto::Platform *platform);
 
-    void Tick();
+  void Tick();
 
  private:
-    proto::Platform *platform_;
+  proto::Platform *platform_;
 };
 }  // namespace core

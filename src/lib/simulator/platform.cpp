@@ -1,4 +1,4 @@
-#include "platform.h"
+#include <lib/simulator/platform.h>
 
 namespace core {
 Platform::Platform(proto::Platform *platform) : platform_(platform) {

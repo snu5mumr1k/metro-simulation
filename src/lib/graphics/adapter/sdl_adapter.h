@@ -14,35 +14,35 @@
 namespace graphics {
 class SDL {
  public:
-    enum class Action {
-        Quit,
-        ResetToDefaults,
-        ResetToBeginning,
-        Idle
-    };
+  enum class Action {
+  Quit,
+  ResetToDefaults,
+  ResetToBeginning,
+  Idle
+  };
 
-    SDL();
-    ~SDL();
+  SDL();
+  ~SDL();
 
-    proto::Config EditConfig(const proto::Config &config) const;
-    proto::Metro EditMetro(const proto::Metro &metro) const;
+  proto::Config EditConfig(const proto::Config &config) const;
+  proto::Metro EditMetro(const proto::Metro &metro) const;
 
-    Action DrawInterface() const;
-    void Draw(const proto::Config &config, const proto::Metro &metro) const;
+  Action DrawInterface() const;
+  void Draw(const proto::Config &config, const proto::Metro &metro) const;
 
-    void InitFrame();
-    void FinishFrame();
+  void InitFrame();
+  void FinishFrame();
 
  private:
-    int width_;
-    int height_;
+  int width_;
+  int height_;
 
-    SDL_Window *window_;
-    SDL_GLContext gl_context_;
+  SDL_Window *window_;
+  SDL_GLContext gl_context_;
 
-    int context_major_version_;
-    int context_minor_version_;
+  int context_major_version_;
+  int context_minor_version_;
 
-    std::string glsl_version_;
+  std::string glsl_version_;
 };
 }  // namespace graphics

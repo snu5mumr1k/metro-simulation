@@ -14,5 +14,6 @@ target_link_libraries(lib-simulator
 )
 
 target_include_directories(lib-simulator
+    PUBLIC ${CMAKE_SOURCE_DIR}
     PRIVATE ${PROTOBUF_LIBRARY}
 )

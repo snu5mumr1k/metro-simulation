@@ -3,7 +3,7 @@
 namespace util {
 template<typename T>
 T* Singleton() {
-    static T instance;
-    return &instance;
+  static T instance;
+  return &instance;
 }
 }  // namespace util

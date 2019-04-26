@@ -5,11 +5,11 @@
 namespace core {
 class Station {
  public:
-    explicit Station(proto::Station *station);
+  explicit Station(proto::Station *station);
 
-    void Tick();
+  void Tick();
 
  private:
-    proto::Station *station_;
+  proto::Station *station_;
 };
 }  // namespace core

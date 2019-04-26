@@ -5,13 +5,13 @@
 namespace core {
 class Section {
  public:
-    explicit Section(proto::Section *section);
+  explicit Section(proto::Section *section);
 
-    void Tick();
+  void Tick();
 
-    const proto::Section &section() const;
+  const proto::Section &section() const;
 
  private:
-    proto::Section *section_;
+  proto::Section *section_;
 };
 }  // namespace core
