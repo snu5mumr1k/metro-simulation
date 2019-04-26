@@ -1,4 +1,5 @@
 #include <lib/simulator/line.h>
+#include <unordered_set>
 
 namespace core {
 Line::Line(proto::Line *line) : line_(line) {

@@ -8,7 +8,7 @@ namespace core {
 Train::Train(proto::Train *train, const std::unordered_map<int64_t, Section> &sections)
   : train_(train),
     path_(train->path(), sections),
-  current_section_() {
+    current_section_() {
 }
 
 void Train::Tick(const proto::Config &config) {

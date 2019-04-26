@@ -75,11 +75,11 @@ GLuint LinkProgram(GLuint vertex_shader, GLuint fragment_shader) {
 }
 }  // namespace
 
-Shader::Shader(const std::string &vertex_shader_filename, const std::string &fragment_shader_filename):
-  program_(0),
-  vertex_shader_(0),
-  fragment_shader_(0),
-  locations_() {
+Shader::Shader(const std::string &vertex_shader_filename, const std::string &fragment_shader_filename)
+  : program_(0),
+    vertex_shader_(0),
+    fragment_shader_(0),
+    locations_() {
   vertex_shader_ = LoadShader(vertex_shader_filename, GL_VERTEX_SHADER);
   fragment_shader_ = LoadShader(fragment_shader_filename, GL_FRAGMENT_SHADER);
   program_ = LinkProgram(vertex_shader_, fragment_shader_);
@@ -94,25 +94,25 @@ Shader::~Shader() {
 void Shader::Activate() const {
   glUseProgram(program_);
   if (glGetError() != GL_NO_ERROR) {
-  throw std::runtime_error("glUseProgram failed");
+    throw std::runtime_error("glUseProgram failed");
   }
 }
 
 void Shader::SetUniform(const std::string &name, GLint value) const {
   glUniform1i(GetLocation(name), value);
   if (glGetError() != GL_NO_ERROR) {
-  throw std::runtime_error("glUniform1i failed for " + name);
+    throw std::runtime_error("glUniform1i failed for " + name);
   }
 }
 
 GLint Shader::GetLocation(const std::string &name) const {
   auto found = locations_.find(name);
   if (found == locations_.end()) {
-  GLint location = glGetUniformLocation(program_, name.c_str());
-  if (glGetError() != GL_NO_ERROR) {
-    throw std::runtime_error("glGetUniformLocation failed for " + name);
-  }
-  found = locations_.insert({name, location}).first;
+    GLint location = glGetUniformLocation(program_, name.c_str());
+    if (glGetError() != GL_NO_ERROR) {
+      throw std::runtime_error("glGetUniformLocation failed for " + name);
+    }
+    found = locations_.insert({name, location}).first;
   }
   return found->second;
 }

@@ -8,8 +8,8 @@
 Texture::Texture(const std::string &filename) : gl_id_(0) {
   SDL_Surface* image = SDL_LoadBMP(filename.c_str());
   if (!image) {
-  const std::string error = SDL_GetError();
-  throw std::runtime_error("cant load bmp texture from " + filename + " " + error);
+    const std::string error = SDL_GetError();
+    throw std::runtime_error("cant load bmp texture from " + filename + " " + error);
   }
 
   const int width = image->w;

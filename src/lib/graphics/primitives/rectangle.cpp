@@ -72,6 +72,6 @@ void DrawRectangle(
   glDeleteVertexArrays(1, &vao);
 
   if (glGetError() != GL_NO_ERROR) {
-  throw std::runtime_error("glDrawElements failed");
+    throw std::runtime_error("glDrawElements failed");
   }
 }

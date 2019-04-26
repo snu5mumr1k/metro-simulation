@@ -9,6 +9,8 @@
 #include <map>
 #include <string>
 #include <unordered_map>
+#include <utility>
+#include <vector>
 
 namespace {
 void EditLines(proto::Metro *metro) {
@@ -153,7 +155,11 @@ void EditTrains(proto::Metro *metro) {
           std::vector<std::pair<int64_t, int64_t>> ordered_path;
           for (const auto &p : path.next_step()) {
             const auto next_section = p.second;
-            ordered_path.push_back({line->sections(next_section).origin_platform_id(), line->sections(next_section).destination_platform_id()});
+            ordered_path.push_back(
+              {
+                line->sections(next_section).origin_platform_id(),
+                line->sections(next_section).destination_platform_id()
+              });
           }
           ImGui::Text("First section: %lld", path.first_section());
           for (const auto &p : ordered_path) {
