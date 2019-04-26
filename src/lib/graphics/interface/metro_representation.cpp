@@ -7,7 +7,6 @@
 #include <unordered_map>
 #include <vector>
 
-#include <iostream>
 namespace graphics {
 void GenerateTextMetroRepresentation(const proto::Metro &metro) {
   std::unordered_map<int64_t, std::vector<const proto::Train *>> sections_trains;

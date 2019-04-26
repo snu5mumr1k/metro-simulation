@@ -101,7 +101,6 @@ void EditLines(proto::Metro *metro) {
   }
 }
 
-#include <iostream>
 void EditTrains(proto::Metro *metro) {
   ImGui::Separator();
   ImGui::Spacing();
@@ -131,9 +130,12 @@ void EditTrains(proto::Metro *metro) {
             break;
         }
         ImGui::SameLine();
-        if (ImGui::Button("Reset train")) {
-          train->set_state(proto::Train::IDLE);
-          break;
+        {
+          const std::string button_id = "Reset train##" + std::to_string(train->id());
+          if (ImGui::Button(button_id.c_str())) {
+            train->set_state(proto::Train::BEGIN);
+            break;
+          }
         }
         ImGui::Text("Speed: %lld mps", train->meters_per_second());
         const std::string button_id = "-##" + std::to_string(train->id());
@@ -141,10 +143,10 @@ void EditTrains(proto::Metro *metro) {
           line->mutable_trains()->SwapElements(j, line->mutable_trains()->size() - 1);
           line->mutable_trains()->RemoveLast();
           j--;
-          continue;
+          break;
         }
         ImGui::SameLine();
-        const std::string train_header = "Train##" + std::to_string(train->id());
+        const std::string train_header = "Train " + std::to_string(train->id()) + "##" + std::to_string(train->id());
         if (ImGui::CollapsingHeader(train_header.c_str())) {
           ImGui::Indent();
           auto &path = *train->mutable_path();
@@ -183,12 +185,15 @@ void EditTrains(proto::Metro *metro) {
           }
           ImGui::Unindent();
         }
+        ImGui::Unindent();
       }
+      static int64_t meters_per_second = 0;
+      ImGui::InputScalar("Meters per second##train", ImGuiDataType_S64, &meters_per_second);
       if (ImGui::Button("+##train")) {
         auto new_train = line->add_trains();
+        new_train->set_meters_per_second(meters_per_second);
         new_train->set_id(util::Singleton<util::IdGenerator<proto::Train>>()->GenerateNewId());
       }
-      ImGui::Unindent();
     }
   }
 }

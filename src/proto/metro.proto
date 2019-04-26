@@ -49,6 +49,7 @@ message Train {
     PLATFORM = 0;
     SECTION = 1;
     IDLE = 2;
+    BEGIN = 3;
   }
 
   double section_completed_meters = 4;

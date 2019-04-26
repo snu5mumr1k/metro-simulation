@@ -11,7 +11,6 @@ Train::Train(proto::Train *train, const std::unordered_map<int64_t, Section> &se
   current_section_() {
 }
 
-#include <iostream>
 void Train::Tick(const proto::Config &config) {
   switch (train_->state()) {
     case proto::Train::PLATFORM: {
@@ -35,12 +34,12 @@ void Train::Tick(const proto::Config &config) {
       break;
     }
     case proto::Train::SECTION: {
-      const double completed =
-        train_->section_completed_meters() + train_->meters_per_second() * config.seconds_per_tick();
       if (!current_section_) {
         train_->set_state(proto::Train::IDLE);
         break;
       }
+      const double completed =
+        train_->section_completed_meters() + train_->meters_per_second() * config.seconds_per_tick();
       const int64_t section_length = current_section_->section().length();
       if (completed >= section_length) {
         train_->set_state(proto::Train::PLATFORM);
@@ -50,6 +49,9 @@ void Train::Tick(const proto::Config &config) {
       break;
     }
     case proto::Train::IDLE: {
+      break;
+    }
+    case proto::Train::BEGIN: {
       current_section_.emplace(path_.FirstSection());
       const auto section = current_section_->section();
       train_->set_arrived_at(config.current_simulation_timestamp());

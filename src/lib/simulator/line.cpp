@@ -23,4 +23,17 @@ void Line::Tick(const proto::Config &config) {
     train.Tick(config);
   }
 }
+
+void Line::Refresh() {
+  std::unordered_set<int64_t> inactive_trains;
+  for (auto &[train_id, _] : trains_) {
+    inactive_trains.insert(train_id);
+  }
+  for (const auto &train : *line_->mutable_trains()) {
+    inactive_trains.erase(train.id());
+  }
+  for (const int64_t train_id : inactive_trains) {
+    trains_.erase(train_id);
+  }
+}
 }  // namespace core

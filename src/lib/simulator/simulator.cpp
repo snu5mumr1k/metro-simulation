@@ -68,6 +68,10 @@ void Simulator::Reset(proto::Metro metro_data) {
   metro_ = Metro(&metro_data_);
 }
 
+void Simulator::Refresh() {
+  metro_.Refresh();
+}
+
 void Simulator::Tick(const proto::Config &config) {
   metro_.Tick(config);
 }

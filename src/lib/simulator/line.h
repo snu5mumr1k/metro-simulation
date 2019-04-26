@@ -16,6 +16,7 @@ class Line {
   explicit Line(proto::Line *line);
 
   void Tick(const proto::Config &config);
+  void Refresh();
 
  private:
   proto::Line *line_;

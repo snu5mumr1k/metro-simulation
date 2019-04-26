@@ -13,6 +13,7 @@ class Simulator {
   void Reset(const proto::Config &config);
   void Reset(proto::Metro metro_data);
   void Tick(const proto::Config &config);
+  void Refresh();
 
   const proto::Metro &metro() const;
 

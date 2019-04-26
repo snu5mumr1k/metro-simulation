@@ -13,6 +13,7 @@ class Metro {
   explicit Metro(proto::Metro *metro);
 
   void Tick(const proto::Config &config);
+  void Refresh();
 
   const proto::Metro &metro() const;
 
