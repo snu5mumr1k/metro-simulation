@@ -181,7 +181,6 @@ void EditTrains(proto::Metro *metro) {
                 break;
               }
             }
-            // path.set_first_section(std::min(path.next_step().begin(), path.next_step().end(), [](const auto& a, const auto& b) {return a->first < b->first;})->second);
           }
           ImGui::Unindent();
         }
