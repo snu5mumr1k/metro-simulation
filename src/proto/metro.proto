@@ -60,4 +60,6 @@ message Train {
 
 message Path {
   map<int64, int64> next_step = 1;
+  int64 first_section = 2;
+  int64 last_section = 3;
 }
