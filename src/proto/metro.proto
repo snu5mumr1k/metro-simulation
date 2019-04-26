@@ -3,61 +3,61 @@ syntax = "proto3";
 package proto;
 
 message Metro {
-    repeated Line lines = 1;
+  repeated Line lines = 1;
 }
 
 message Line {
-    int64 id = 1;
+  int64 id = 1;
 
-    repeated Station stations = 2;
-    repeated Section sections = 3;
+  repeated Station stations = 2;
+  repeated Section sections = 3;
 
-    repeated Train trains = 4;
+  repeated Train trains = 4;
 }
 
 message Station {
-    int64 id = 1;
+  int64 id = 1;
 
-    repeated Platform platforms = 2;
+  repeated Platform platforms = 2;
 }
 
 message Section {
-    int64 id = 1;
+  int64 id = 1;
 
-    int64 origin_platform_id = 2;
-    int64 destination_platform_id = 3;
+  int64 origin_platform_id = 2;
+  int64 destination_platform_id = 3;
 
-    int64 length = 4;
+  int64 length = 4;
 }
 
 message Platform {
-    int64 id = 1;
+  int64 id = 1;
 
-    enum Type {
-        PASSENGER = 0;
-        DEPOT = 1;
-    }
+  enum Type {
+    PASSENGER = 0;
+    DEPOT = 1;
+  }
 }
 
 message Train {
-    int64 id = 1;
+  int64 id = 1;
 
-    int64 meters_per_second = 2;
-    Path path = 3;
+  int64 meters_per_second = 2;
+  Path path = 3;
 
-    enum State {
-        PLATFORM = 0;
-        SECTION = 1;
-        IDLE = 2;
-    }
+  enum State {
+    PLATFORM = 0;
+    SECTION = 1;
+    IDLE = 2;
+  }
 
-    int64 section_completed_meters = 4;
-    int64 platform_id = 5;
-    int64 section_id = 6;
-    int64 arrived_at = 7;
-    State state = 8;
+  int64 section_completed_meters = 4;
+  int64 platform_id = 5;
+  int64 section_id = 6;
+  int64 arrived_at = 7;
+  State state = 8;
 }
 
 message Path {
-    map<int64, int64> next_step = 1;
+  map<int64, int64> next_step = 1;
 }
